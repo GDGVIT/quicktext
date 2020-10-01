@@ -1,5 +1,7 @@
 from qtc.imports import *
 
+__all__ = ["TextClassifierData"]
+
 
 class TextClassifierData(Dataset):
     """

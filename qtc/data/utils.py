@@ -1,5 +1,7 @@
 from qtc import *
 
+__all__ = ["Vocab", "_prepare_label"]
+
 
 class Vocab:
     """
