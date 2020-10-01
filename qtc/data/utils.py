@@ -69,7 +69,7 @@ class Vocab:
         return self.itos
 
 
-def _prepare_label(labels):
+def _prepare_labels(labels):
     """
     This function converts labels to a format that can be 
     used by PyTorch models
