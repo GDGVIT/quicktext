@@ -46,8 +46,6 @@ class Vocab:
 
         self.itos = {idx: word for (word, idx) in self.stoi.items()}
 
-        return self.stoi, self.itos
-
     def get_stoi(self):
         """
         This function returns the stoi dictionary
