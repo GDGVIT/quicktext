@@ -1,4 +1,6 @@
 from qtc.imports import *
+from qtc.data.utils import Vocab, _prepare_labels
+from qtc.featurizers import SpacyFeaturizer
 
 __all__ = ["TextClassifierData"]
 
@@ -24,8 +26,16 @@ class TextClassifierData(Dataset):
 
         self.featurizer = SpacyFeaturizer()
 
-        self.prepare_labels()
-        self.build_vocab()
+        self.vocab = Vocab(self.featurizer)
+
+        # Prepare labels
+        self._labels, _, _ = _prepare_labels(self._labels)
+
+        # Build vocabulary
+        self.vocab.build(self._texts)
+
+        self.stoi = self.vocab.get_stoi()
+        self.itos = self.vocab.get_itos()
 
     def __len__(self):
         """
@@ -36,7 +46,7 @@ class TextClassifierData(Dataset):
             int: Total length of the dataset
         """
 
-        return len(self.texts)
+        return len(self._texts)
 
     def __getitem__(self, idx):
         """
