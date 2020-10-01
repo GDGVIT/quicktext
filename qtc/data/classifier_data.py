@@ -34,6 +34,8 @@ class TextClassifierData(Dataset):
         # Build vocabulary
         self.vocab.build(self._texts)
 
+        self._idx_texts = self.vocab.get_tokenized_texts()
+
         self.stoi = self.vocab.get_stoi()
         self.itos = self.vocab.get_itos()
 
