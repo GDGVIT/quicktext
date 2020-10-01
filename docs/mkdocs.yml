@@ -1,6 +1,6 @@
-site_name: "bull"
+site_name: "QuickText"
 theme:
-  name: "material"
+  name: "readthedocs"
   palette:
     primary: "dark-blue"
     accent: "dark-blue"
