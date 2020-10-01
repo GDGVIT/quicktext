@@ -2,6 +2,7 @@ from qtc.imports import *
 
 __all__ = ["SpacyFeaturizer"]
 
+
 class SpacyFeaturizer:
     """
     A class which provides functionality for tokenization 
