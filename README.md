@@ -21,13 +21,7 @@
 ![PyPi Release](https://github.com/picturate/qtc/workflows/PyPi%20Release/badge.svg)
 ![Install Package](https://github.com/picturate/qtc/workflows/Install%20Package/badge.svg)
 [![codecov](https://codecov.io/gh/picturate/qtc/branch/master/graph/badge.svg)](https://codecov.io/gh/picturate/qtc)
-
-
 * * * * *
-<hr>
-
-<hr>
-
 
 QuickText is a text classification framework with two main features:
 - Fast training and inference
