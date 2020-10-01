@@ -49,7 +49,7 @@ QuickText uses the following libraries
 
 | Library | Used for |
 | ---- | --- |
-| [**sPacy**](https://spacy.io/) | Used for text processing and getting feature vectors |
-| [**PyTorch**](https://pytorch.org/) | Used for building neural networks for text classification |
-| [**Pytorch_lightning**](https://pytorch-lightning.readthedocs.io/en/stable/) | Used for training the models built using PyTorch |
+| [**sPacy**](https://spacy.io/) | Text processing and getting feature vectors |
+| [**PyTorch**](https://pytorch.org/) | Building neural networks for text classification |
+| [**Pytorch_lightning**](https://pytorch-lightning.readthedocs.io/en/stable/) | Model training |
 
