@@ -1,7 +1,7 @@
 # General imports
 import os
 import random
-import logging 
+import logging
 
 # Utility imports
 from tqdm import tqdm
@@ -12,7 +12,7 @@ import pandas as pd
 
 # Torch imports
 import torch
-import torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader
 
 # Pytorch lightning
 import pytorch_lightning as pl
