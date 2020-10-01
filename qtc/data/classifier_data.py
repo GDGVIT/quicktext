@@ -61,7 +61,7 @@ class TextClassifierData(Dataset):
 
         # Get text and label
         _idx_text = self._idx_texts[idx]
-        _label = self.labels[idx]
+        _label = self._labels[idx]
 
         return {"idx_text": _idx_text, "label": _label}
 
