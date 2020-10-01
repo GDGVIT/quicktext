@@ -1,4 +1,4 @@
-from qtc import *
+from qtc.imports import *
 
 __all__ = ["Vocab", "_prepare_label"]
 
@@ -94,7 +94,7 @@ def _prepare_labels(labels):
 
     print("[INFO] Preparing the labels ...")
 
-    if str(labels[0].replace(".", "", 1)).isdigit():
+    if str(labels[0]).replace(".", "", 1).isdigit():
 
         # Convert to int
         labels = list(map(int, labels))
