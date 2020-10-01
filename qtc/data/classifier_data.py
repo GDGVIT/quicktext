@@ -76,19 +76,28 @@ class TextClassifierData(Dataset):
                     and sequence lengths which are required in RNN
         """
 
-        texts = []
-        seq_lens = []
-        labels = []
+        # Retrieve data from batch
+        _idx_texts = [item["idx_text"] for item in batch]
+        _labels = [item["label"] for item in batch]
 
-        for item in batch:
-            _idx_text = item["idx_text"]
-            _label = item["label"]
+        # Sort the list
+        _idx_texts, _labels = map(
+            list, zip(*sorted(zip(_idx_texts, _labels), reverse=True))
+        )
+
+        max_len = len(_idx_texts[0])
+
+        # Initialize text list
+        _texts = []
+        _seq_lens = []
+
+        for _idx_text in _idx_texts:
+
             _len = len(_idx_text)
-
-            pad_len = self.max_len - len(_idx_text)
+            pad_len = max_len - _len
 
             if pad_len < 0:
-                _idx_text = _idx_text[: self.max_len]
+                _idx_text = _idx_text[:max_len]
             else:
                 _idx_text = np.pad(
                     _idx_text, (0, pad_len), "constant", constant_values=0
@@ -98,16 +107,15 @@ class TextClassifierData(Dataset):
 
             _feature = self.featurizer.get_feature_vector(_text)
 
-            texts.append(_feature)
-            labels.append(_label)
+            _texts.append(_feature)
 
-            seq_lens.append(_len if _len < self.max_len else self.max_len)
+            _seq_lens.append(_len if _len < max_len else max_len)
 
-        texts = np.stack(texts)
-        texts = torch.from_numpy(texts)
+        _texts = np.stack(_texts)
+        _texts = torch.from_numpy(_texts)
 
         return {
-            "texts": texts,
-            "labels": torch.tensor(labels),
-            "seq_lens": torch.tensor(seq_lens),
+            "texts": _texts,
+            "labels": torch.tensor(_labels),
+            "seq_lens": torch.tensor(_seq_lens),
         }
