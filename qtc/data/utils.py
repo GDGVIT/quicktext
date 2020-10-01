@@ -45,3 +45,31 @@ class Vocab:
         self.itos = {idx: word for (word, idx) in self.stoi.items()}
 
         return self.stoi, self.itos
+
+
+def _prepare_label(labels):
+    """
+    This function converts labels to a format that can be 
+    used by PyTorch models
+    """
+
+    print("[INFO] Preparing the labels ...")
+
+    if str(labels[0].replace(".", "", 1)).isdigit():
+
+        # Convert to int
+        labels = list(map(int, labels))
+        labels = list(map(str, labels))
+
+    unique_labels = list(set(labels))
+
+    label2idx = {}
+    idx2label = {}
+
+    for idx, label in enumerate(unique_labels):
+        label2idx[label] = float(idx)
+        idx2label[float(idx)] = label
+
+    labels = [label2idx[_label] for _label in labels]
+
+    return labels, idx2label, label2idx
