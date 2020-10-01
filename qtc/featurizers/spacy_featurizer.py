@@ -33,9 +33,10 @@ class SpacyFeaturizer:
         """
 
         tokens = self.tokenizer(text)
+
         return [
             token.text.lower()
-            for token in token
+            for token in tokens
             if token.text.strip() and not token.is_punct
         ]
 
