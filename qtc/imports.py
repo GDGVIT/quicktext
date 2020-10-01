@@ -10,6 +10,11 @@ from tqdm import tqdm
 import numpy as np
 import pandas as pd
 
+# sPacy imports
+import spacy
+from spacy.tokenizer import Tokenizer
+import en_core_web_md
+
 # Torch imports
 import torch
 from torch.utils.data import Dataset, DataLoader
