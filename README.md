@@ -2,7 +2,12 @@
 <div align="center">
     <img src="images/banner.jpg" width=400 height=100 alt="Banner">
 	<h4 align="center"> A Fast & Simple Text Detection Framework  <h4>
+
 </div>
+
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![DOCS](https://img.shields.io/badge/Docs-latest-green.svg)](https://picturate.github.io/quickTextCassifier/) 
+
 
 * * * * *
 >**Note: This library is still work in progress**
@@ -20,8 +25,6 @@
 
 * * * * *
 <hr>
-
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 <hr>
 
