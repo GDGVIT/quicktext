@@ -33,18 +33,35 @@ class Vocab:
         print("[INFO] Building the vocabulary")
 
         # Tokenize the text
-        self.texts = [self.featurizer.tokenize(text) for text in tqdm(texts)]
+        self._texts = [self.featurizer.tokenize(text) for text in tqdm(texts)]
 
         # Build dictionary of word -> index
         self.stoi = {}
         self.stoi["@pad@"] = 0
         index = 1
-        for text in self.texts:
-            for token in text:
+        for _text in self._texts:
+            for token in _text:
                 self.stoi[token] = index
                 index += 1
 
         self.itos = {idx: word for (word, idx) in self.stoi.items()}
+
+    def get_tokenized_texts(self):
+        """
+        This function returns the tokenized text
+        Args:
+            None
+        Returns:
+            list: List of tokenized text
+        """
+
+        self._idx_texts = []
+        for text in self._texts:
+            _text = [self.stoi[token] for token in text if token in self.stoi]
+
+            self._idx_texts.append(_text)
+
+        return self._idx_texts
 
     def get_stoi(self):
         """
