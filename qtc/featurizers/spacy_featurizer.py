@@ -1,5 +1,6 @@
 from qtc.imports import *
 
+__all__ = ["SpacyFeaturizer"]
 
 class SpacyFeaturizer:
     """
