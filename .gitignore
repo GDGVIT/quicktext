@@ -2,4 +2,4 @@
 qtc/data/__pycache__/
 qtc/featurizers/__pycache__/
 qtc/__pycache__/
-
+qtc/nets/__pycache__/
