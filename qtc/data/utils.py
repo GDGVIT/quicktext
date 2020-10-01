@@ -48,6 +48,28 @@ class Vocab:
 
         return self.stoi, self.itos
 
+    def get_stoi(self):
+        """
+        This function returns the stoi dictionary
+        Args:
+            None
+        Returns:
+            dict: The stoi dictionary
+        """
+
+        return self.stoi
+
+    def get_itos(self):
+        """
+        This function returns the itos dictionary
+        Args:
+            None
+        Returns:
+            dict: The itos dictionary
+        """
+
+        return self.itos
+
 
 def _prepare_label(labels):
     """
