@@ -10,12 +10,11 @@ class BiLSTM(pl.LightningModule):
     def __init__(
         self,
         embedding_dim,
-        hidden_dim,
         output_dim,
-        n_layers,
-        bidirectional,
-        dropout,
-        pad_idx,
+        hidden_dim=128,
+        n_layers=2,
+        bidirectional=True,
+        dropout=0.5,
     ):
         super().__init__()
 
