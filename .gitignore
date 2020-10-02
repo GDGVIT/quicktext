@@ -4,3 +4,6 @@ qtc/featurizers/__pycache__/
 qtc/__pycache__/
 qtc/nets/__pycache__/
 tests/__pycache__/
+
+# Lightning logs
+lightning_logs/
