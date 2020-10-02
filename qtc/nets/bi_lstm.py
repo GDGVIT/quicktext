@@ -5,6 +5,8 @@ Code for the neural net based on a repo by bentrevett
 https://github.com/bentrevett/pytorch-sentiment-analysis
 """
 
+__all__ = ["BiLSTM"]
+
 
 class BiLSTM(pl.LightningModule):
     def __init__(
