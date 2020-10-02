@@ -36,7 +36,8 @@ QuickText is built on top of sPacy and PyTorch and the components provided can b
 
 | Model Class | Name | Docs |
 |:-----------:|:---------------------------------------------:|:-------------:|
-| BiLSTM | Bidirectional LSTM  | [Click here](https://arxiv.org/abs/2003.12137) |
+| BiLSTM | Bidirectional LSTM  | [Click here]() |
+| CNN2D| 2D Convolutional Net  | [Click here]() |
 
 > We are currently adding more models to this framework
 
