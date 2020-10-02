@@ -23,3 +23,4 @@ from torch.utils.data import Dataset, DataLoader
 
 # Pytorch lightning
 import pytorch_lightning as pl
+from pytorch_lightning.metrics.functional import accuracy
