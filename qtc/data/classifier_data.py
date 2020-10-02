@@ -10,7 +10,7 @@ class TextClassifierData(Dataset):
     This class provides labels and tokenized and vectorized text
     """
 
-    def __init__(self, texts, labels, model="en_core_web_md"):
+    def __init__(self, texts, labels,return_vectors=True, model="en_core_web_md"):
         """
         Constructor function for TextClassifierData class
         Args:
@@ -23,6 +23,8 @@ class TextClassifierData(Dataset):
 
         self._texts = texts
         self._labels = labels
+
+        self.return_vectors = return_vectors
 
         self.featurizer = SpacyFeaturizer()
 
@@ -89,6 +91,7 @@ class TextClassifierData(Dataset):
 
         # Initialize text list
         _texts = []
+        _features = []
         _seq_lens = []
 
         for _idx_text in _idx_texts:
@@ -107,15 +110,25 @@ class TextClassifierData(Dataset):
 
             _feature = self.featurizer.get_feature_vector(_text)
 
-            _texts.append(_feature)
+            _texts.append(_idx_text)
+            _features.append(_feature)
 
             _seq_lens.append(_len if _len < max_len else max_len)
 
         _texts = np.stack(_texts)
         _texts = torch.from_numpy(_texts)
 
-        return {
+        if self.return_vectors:
+            _batch = {
+            "texts": _features,
+            "labels": torch.tensor(_labels),
+            "seq_lens": torch.tensor(_seq_lens),
+            }
+        else:
+            _batch = {
             "texts": _texts,
             "labels": torch.tensor(_labels),
             "seq_lens": torch.tensor(_seq_lens),
-        }
+            }
+
+        return _batch
