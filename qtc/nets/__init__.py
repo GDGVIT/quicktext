@@ -1,1 +1,2 @@
-from .bi_lstm import BiLSTM
+from .bi_lstm import *
+from .cnn2d import *
