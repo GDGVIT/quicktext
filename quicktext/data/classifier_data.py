@@ -1,6 +1,6 @@
-from qtc.imports import *
-from qtc.data.utils import Vocab, _prepare_labels
-from qtc.featurizers import SpacyFeaturizer
+from quicktext.imports import *
+from quicktext.data.utils import Vocab, _prepare_labels
+from quicktext.featurizers import SpacyFeaturizer
 
 __all__ = ["TextClassifierData"]
 
