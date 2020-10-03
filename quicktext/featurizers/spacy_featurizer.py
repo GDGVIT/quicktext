@@ -1,4 +1,4 @@
-from qtc.imports import *
+from quicktext.imports import *
 
 __all__ = ["SpacyFeaturizer"]
 

@@ -1,8 +1,8 @@
 # pycache
-qtc/data/__pycache__/
-qtc/featurizers/__pycache__/
-qtc/__pycache__/
-qtc/nets/__pycache__/
+quicktext/data/__pycache__/
+quicktext/featurizers/__pycache__/
+quicktext/__pycache__/
+quicktext/nets/__pycache__/
 tests/__pycache__/
 
 # Lightning logs

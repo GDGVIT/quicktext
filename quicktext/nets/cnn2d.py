@@ -1,75 +1,77 @@
-from qtc.imports import *
+from quicktext.imports import *
 
 """
 Code for the neural net based on a repo by bentrevett
 https://github.com/bentrevett/pytorch-sentiment-analysis
 """
 
-__all__ = ["BiLSTM"]
+__all__ = ["CNN2D"]
 
 
-class BiLSTM(pl.LightningModule):
+class CNN2D(pl.LightningModule):
     def __init__(
         self,
+        vocab_size,
         embedding_dim,
+        n_filters,
+        filter_sizes,
         output_dim,
-        hidden_dim=128,
-        n_layers=2,
-        bidirectional=True,
-        dropout=0.5,
+        dropout,
+        pad_idx,
     ):
         super().__init__()
 
-        self.rnn = nn.LSTM(
-            embedding_dim,
-            hidden_dim,
-            num_layers=n_layers,
-            bidirectional=bidirectional,
-            dropout=dropout,
+        self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=pad_idx)
+
+        self.convs = nn.ModuleList(
+            [
+                nn.Conv2d(
+                    in_channels=1,
+                    out_channels=n_filters,
+                    kernel_size=(fs, embedding_dim),
+                )
+                for fs in filter_sizes
+            ]
         )
 
-        self.fc = nn.Linear(hidden_dim * 2, output_dim)
+        self.fc = nn.Linear(len(filter_sizes) * n_filters, output_dim)
 
         self.dropout = nn.Dropout(dropout)
-
         self.criterion = nn.CrossEntropyLoss()
 
-    def forward(self, vectors, seq_lengths):
+    def forward(self, vectors):
 
-        # embedded = [ batch size, sent len, emb dim]
+        # text = [batch size, sent len]
 
-        # pack sequence
-        packed_embedded = nn.utils.rnn.pack_padded_sequence(
-            vectors, seq_lengths, batch_first=True
-        )
+        #         embedded = self.embedding(text)
 
-        packed_output, (hidden, cell) = self.rnn(packed_embedded)
+        # embedded = [batch size, sent len, emb dim]
 
-        # unpack sequence
-        output, output_lengths = nn.utils.rnn.pad_packed_sequence(packed_output)
+        #         embedded = embedded.unsqueeze(1)
+        vectors = vectors.float()
+        vectors = vectors.unsqueeze(1)
 
-        # output = [sent len, batch size, hid dim * num directions]
-        # output over padding tokens are zero tensors
+        # embedded = [batch size, 1, sent len, emb dim]
 
-        # hidden = [num layers * num directions, batch size, hid dim]
-        # cell = [num layers * num directions, batch size, hid dim]
+        conved = [F.relu(conv(vectors)).squeeze(3) for conv in self.convs]
 
-        # concat the final forward (hidden[-2,:,:]) and backward (hidden[-1,:,:]) hidden layers
-        # and apply dropout
+        # conved_n = [batch size, n_filters, sent len - filter_sizes[n] + 1]
 
-        hidden = self.dropout(torch.cat((hidden[-2, :, :], hidden[-1, :, :]), dim=1))
+        pooled = [F.max_pool1d(conv, conv.shape[2]).squeeze(2) for conv in conved]
 
-        # hidden = [batch size, hid dim * num directions]
+        # pooled_n = [batch size, n_filters]
 
-        return self.fc(hidden)
+        cat = self.dropout(torch.cat(pooled, dim=1))
+
+        # cat = [batch size, n_filters * len(filter_sizes)]
+
+        return self.fc(cat)
 
     def training_step(self, batch, batch_idx):
 
         text, text_lengths = batch["texts"], batch["seq_lens"]
 
-        text = text.float()
-
-        predictions = self(text, text_lengths).squeeze(1)
+        predictions = self(text).squeeze(1)
 
         loss = self.criterion(predictions, batch["labels"].long())
 
@@ -84,9 +86,7 @@ class BiLSTM(pl.LightningModule):
 
         text, text_lengths = batch["texts"], batch["seq_lens"]
 
-        text = text.float()
-
-        predictions = self(text, text_lengths).squeeze(1)
+        predictions = self(text).squeeze(1)
 
         loss = self.criterion(predictions, batch["labels"].long())
 
