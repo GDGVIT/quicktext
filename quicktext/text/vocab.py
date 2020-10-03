@@ -17,7 +17,7 @@ class Vocab:
 
         self._pad_token = pad_token
 
-    def build(self, texts):
+    def build(self, texts, min_freq):
         """
         This function builds vocabulary using the input list of text
         Args:
@@ -32,8 +32,8 @@ class Vocab:
         self._stoi = {}
         self._stoi[self._pad_token] = 0
         index = 1
-        for _text in texts:
-            for token in _text:
+        for doc in texts:
+            for token in doc.tokens:
                 self._stoi[token] = index
                 index += 1
 
