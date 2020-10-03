@@ -67,6 +67,8 @@ class BiLSTM(pl.LightningModule):
 
         text, text_lengths = batch["texts"], batch["seq_lens"]
 
+        text = text.float()
+
         predictions = self(text, text_lengths).squeeze(1)
 
         loss = self.criterion(predictions, batch["labels"].long())
@@ -81,6 +83,8 @@ class BiLSTM(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
 
         text, text_lengths = batch["texts"], batch["seq_lens"]
+
+        text = text.float()
 
         predictions = self(text, text_lengths).squeeze(1)
 
