@@ -1,4 +1,5 @@
 from quicktext.imports import *
+from quicktext.featurizers.spacy_featurizer import SpacyFeaturizer
 
 """
 Code for the neural net based on a repo by bentrevett
@@ -11,14 +12,24 @@ __all__ = ["BiLSTM"]
 class BiLSTM(pl.LightningModule):
     def __init__(
         self,
-        embedding_dim,
         output_dim,
+        pretrained_vectors=True,
+        vocab_size=None,
+        embedding_dim=300,
         hidden_dim=128,
         n_layers=2,
         bidirectional=True,
         dropout=0.5,
+        pad_idx=0,
     ):
         super().__init__()
+
+        self.pretrained_vectors = pretrained_vectors
+
+        if not self.pretrained_vectors:
+            self.embedding = nn.Embedding(
+                vocab_size, embedding_dim, padding_idx=pad_idx
+            )
 
         self.rnn = nn.LSTM(
             embedding_dim,
@@ -34,7 +45,14 @@ class BiLSTM(pl.LightningModule):
 
         self.criterion = nn.CrossEntropyLoss()
 
+        self.featurizer = SpacyFeaturizer("en_core_web_md")
+
     def forward(self, vectors, seq_lengths):
+
+        if not self.pretrained_vectors:
+            # text = [sent len, batch size]
+
+            vectors = self.dropout(self.embedding(vectors))
 
         # embedded = [ batch size, sent len, emb dim]
 
@@ -65,35 +83,69 @@ class BiLSTM(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
 
-        text, text_lengths = batch["texts"], batch["seq_lens"]
+        # Convert seq_lens and labels to tensors
+
+        text_lengths = torch.tensor(batch["seq_lens"])
+        labels = torch.tensor(batch["labels"])
+
+        # Need to convert docs to tensor of tokens or ids
+        docs = batch["docs"]
+
+        if self.pretrained_vectors:
+            text = [doc.tokens for doc in docs]
+            text = [self.featurizer.get_feature_vector(tokens) for tokens in text]
+            text = np.stack(text)
+            text = torch.from_numpy(text)
+
+        else:
+            text = [np.array(doc.ids) for doc in docs]
+            text = np.stack(text)
+            text = torch.from_numpy(text)
 
         text = text.float()
 
         predictions = self(text, text_lengths).squeeze(1)
 
-        loss = self.criterion(predictions, batch["labels"].long())
+        loss = self.criterion(predictions, labels.long())
 
         return {
             "loss": loss,
             "predictions": predictions,
-            "label": batch["labels"],
+            "label": labels,
             "log": {"train_loss": loss},
         }
 
     def validation_step(self, batch, batch_idx):
 
-        text, text_lengths = batch["texts"], batch["seq_lens"]
+        # Convert seq_lens and labels to tensors
+
+        text_lengths = torch.tensor(batch["seq_lens"])
+        labels = torch.tensor(batch["labels"])
+
+        # Need to convert docs to tensor of tokens or ids
+        docs = batch["docs"]
+
+        if self.pretrained_vectors:
+            text = [doc.tokens for doc in docs]
+            text = [self.featurizer.get_feature_vector(tokens) for tokens in text]
+            text = np.stack(text)
+            text = torch.from_numpy(text)
+
+        else:
+            text = [np.array(doc.ids) for doc in docs]
+            text = np.stack(text)
+            text = torch.from_numpy(text)
 
         text = text.float()
 
         predictions = self(text, text_lengths).squeeze(1)
 
-        loss = self.criterion(predictions, batch["labels"].long())
+        loss = self.criterion(predictions, labels.long())
 
         return {
             "val_loss": loss,
             "predictions": predictions,
-            "label": batch["labels"],
+            "label": labels,
             "log": {"val_loss": loss},
         }
 
