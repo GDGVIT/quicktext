@@ -32,8 +32,8 @@ class Vocab:
         self._stoi = {}
         self._stoi[self._pad_token] = 0
         index = 1
-        for doc in texts:
-            for token in doc.tokens:
+        for text in texts:
+            for token in text:
                 self._stoi[token] = index
                 index += 1
 
