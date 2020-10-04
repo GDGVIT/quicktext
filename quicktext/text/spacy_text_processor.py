@@ -1,6 +1,6 @@
 from quicktext.imports import *
 from quicktext.text.doc import Doc
-from quictext.text.vocab import Vocab
+from quicktext.text.vocab import Vocab
 from quicktext.data.classifier_data import TextClassifierData
 
 
@@ -45,7 +45,7 @@ class SpacyTextProcessor:
 
         # Split dataset
 
-        train_texts, test_texts, train_labels, text_labels = train_test_split(
+        train_texts, test_texts, train_labels, test_labels = train_test_split(
             texts, labels, test_size
         )
 
@@ -59,6 +59,11 @@ class SpacyTextProcessor:
         self.vocab.build(tokenized_texts, min_freq)
 
         # Prepare dataset
+        train_data = self.build_dataset(train_texts, train_labels)
+        val_data = self.build_dataset(val_texts, val_labels)
+        test_data = self.build_dataset(test_texts, test_labels)
+
+        return {"train_data": train_data, "val_data": val_data, "test_data": test_data}
 
     def build_dataset(self, texts, labels):
         """
@@ -70,6 +75,24 @@ class SpacyTextProcessor:
         Return:
             torch.utils.data.Dataset: A torch dataset object
         """
+
+        docs = [self.build_doc(text) for text in texts]
+        return TextClassifierData(docs, labels)
+
+    def build_doc(self, text):
+        """
+        This function builds a doc object
+        The doc object contains text, tokens, ids
+        Args:
+            text (str): The text for which doc object will be built
+        Returns:
+            Doc: Object of class Doc
+        """
+
+        doc = Doc(text)
+        doc.tokens = self.tokenize(text)
+        doc.ids = [self.vocab.stoi[token] for token in doc.tokens]
+        return doc
 
     def tokenize(self, text):
         """
@@ -89,7 +112,4 @@ class SpacyTextProcessor:
             if token.text.strip() and not token.is_punct
         ]
 
-        doc = Doc(text)
-        doc.tokens = tokens
-
-        return doc
+        return tokens
