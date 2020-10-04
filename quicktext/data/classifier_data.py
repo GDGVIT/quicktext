@@ -1,5 +1,5 @@
 from quicktext.imports import *
-from quicktext.data.utils import Vocab, _prepare_labels
+from quicktext.data.utils import pad_tokens
 from quicktext.featurizers import SpacyFeaturizer
 
 __all__ = ["TextClassifierData"]
@@ -10,36 +10,18 @@ class TextClassifierData(Dataset):
     This class provides labels and tokenized and vectorized text
     """
 
-    def __init__(self, texts, labels, return_vectors=True, model="en_core_web_md"):
+    def __init__(self, docs, labels):
         """
         Constructor function for TextClassifierData class
         Args:
             texts (List): List of texts in dataset
             labels (List): List of labels in dataset
-            model (string): List of sPacy model to use
         Returns:
             None
         """
 
-        self._texts = texts
-        self._labels = labels
-
-        self.return_vectors = return_vectors
-
-        self.featurizer = SpacyFeaturizer()
-
-        self.vocab = Vocab(self.featurizer)
-
-        # Prepare labels
-        self._labels, _, _ = _prepare_labels(self._labels)
-
-        # Build vocabulary
-        self.vocab.build(self._texts)
-
-        self._idx_texts = self.vocab.get_tokenized_texts()
-
-        self.stoi = self.vocab.get_stoi()
-        self.itos = self.vocab.get_itos()
+        self.labels = labels
+        self.docs = docs
 
     def __len__(self):
         """
@@ -50,7 +32,7 @@ class TextClassifierData(Dataset):
             int: Total length of the dataset
         """
 
-        return len(self._texts)
+        return len(self.labels)
 
     def __getitem__(self, idx):
         """
@@ -61,77 +43,59 @@ class TextClassifierData(Dataset):
             dict: A dictionary with text and label
         """
 
-        # Get text and label
-        _idx_text = self._idx_texts[idx]
-        _label = self._labels[idx]
+        # Get doc and label
+        doc = self.docs[idx]
+        label = self.labels[idx]
 
-        return {"idx_text": _idx_text, "label": _label}
+        return {"doc": doc, "label": label}
 
     def get_batch(self, batch):
         """
         Collate function for PyTorch dataloaders
         This function is required to pad the sequences in batch
         Args:
-            batch (dict): The dictionary of texts and labels
+            batch (dict): The dictionary of docs and labels
         Returns:
             dict: This dictionary contains vectorized text input, labels 
                     and sequence lengths which are required in RNN
         """
 
         # Retrieve data from batch
-        _idx_texts = [item["idx_text"] for item in batch]
-        _labels = [item["label"] for item in batch]
+        docs = [item["doc"] for item in batch]
+        labels = [item["label"] for item in batch]
 
         # Sort the list
-        _idx_texts, _labels = map(
-            list, zip(*sorted(zip(_idx_texts, _labels), reverse=True))
+        docs, labels = map(
+            list,
+            zip(
+                *sorted(
+                    zip(docs, labels),
+                    key=lambda _tuple: len(_tuple[0].tokens),
+                    reverse=True,
+                )
+            ),
         )
 
-        max_len = len(_idx_texts[0])
+        max_len = len(docs[0].tokens)
 
-        # Initialize text list
-        _texts = []
-        _features = []
-        _seq_lens = []
+        # Initialize seq len list
+        seq_lens = []
+        for doc in docs:
 
-        for _idx_text in _idx_texts:
-
-            _len = len(_idx_text)
+            _len = len(doc.tokens)
             pad_len = max_len - _len
 
             if pad_len < 0:
-                _idx_text = _idx_text[:max_len]
+                doc.ids = doc.ids[:max_len]
+
+                doc.tokens = doc.tokens[:max_len]
             else:
-                _idx_text = np.pad(
-                    _idx_text, (0, pad_len), "constant", constant_values=0
+                doc.ids = np.pad(
+                    doc.ids, (0, pad_len), "constant", constant_values=0
                 ).tolist()
 
-            _text = [self.itos[_idx] for _idx in _idx_text]
+                doc.tokens = pad_tokens(doc.tokens, max_len)
 
-            _feature = self.featurizer.get_feature_vector(_text)
+            seq_lens.append(_len if _len < max_len else max_len)
 
-            _texts.append(_idx_text)
-            _features.append(_feature)
-
-            _seq_lens.append(_len if _len < max_len else max_len)
-
-        if self.return_vectors:
-            _features = np.stack(_features)
-            _features = torch.from_numpy(_features)
-            _batch = {
-                "texts": _features,
-                "labels": torch.tensor(_labels),
-                "seq_lens": torch.tensor(_seq_lens),
-            }
-        else:
-
-            _texts = np.stack(_texts)
-            _texts = torch.from_numpy(_texts)
-
-            _batch = {
-                "texts": _texts,
-                "labels": torch.tensor(_labels),
-                "seq_lens": torch.tensor(_seq_lens),
-            }
-
-        return _batch
+        return {"docs": docs, "labels": labels, "seq_lens": seq_lens}
