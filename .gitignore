@@ -5,6 +5,7 @@ quicktext/__pycache__/
 quicktext/nets/__pycache__/
 tests/__pycache__/
 quicktext/text/__pycache__/
+quicktext/datasets/__pycache__/
 
 # Lightning logs
 lightning_logs/
