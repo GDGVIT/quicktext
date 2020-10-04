@@ -13,7 +13,7 @@ class SpacyTextProcessor:
         - Creates doc objects
     """
 
-    def __init___(self, model="en_core_web_md"):
+    def __init__(self, model="en_core_web_md", pad_token="<pad>"):
         """
         This is the constructor for SpacyTextProcessor class
         This function loads the tokenizers
@@ -27,6 +27,8 @@ class SpacyTextProcessor:
 
         self.nlp = spacy.load(model, disable=["ner", "tagger"])
         self.tokenizer = Tokenizer(self.nlp.vocab)
+
+        self.pad_token = pad_token
 
         self.vocab = Vocab()
 
@@ -46,14 +48,14 @@ class SpacyTextProcessor:
         # Split dataset
 
         train_texts, test_texts, train_labels, test_labels = train_test_split(
-            texts, labels, test_size
+            texts, labels, test_size=test_size
         )
 
         train_texts, val_texts, train_labels, val_labels = train_test_split(
             train_texts, train_labels, test_size=(1 - test_size) * val_size
         )
 
-        tokenized_texts = self.tokenize(train_texts)
+        tokenized_texts = [self.tokenize(text) for text in train_texts]
 
         # Build vocabulary
         self.vocab.build(tokenized_texts, min_freq)
@@ -91,7 +93,10 @@ class SpacyTextProcessor:
 
         doc = Doc(text)
         doc.tokens = self.tokenize(text)
-        doc.ids = [self.vocab.stoi[token] for token in doc.tokens]
+        doc.ids = [
+            self.vocab.stoi[token] if token in self.vocab.stoi else self.pad_token
+            for token in doc.tokens
+        ]
         return doc
 
     def tokenize(self, text):
