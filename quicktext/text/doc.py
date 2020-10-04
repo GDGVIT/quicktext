@@ -38,3 +38,7 @@ class Doc:
     def tokens(self, new_tokens):
         if isinstance(new_tokens, list):
             self._tokens = new_tokens
+
+    @property
+    def text(self):
+        return self._text
