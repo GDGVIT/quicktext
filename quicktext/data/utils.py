@@ -1,6 +1,6 @@
 from quicktext.imports import *
 
-__all__ = ["prepare_label"]
+__all__ = ["prepare_labels"]
 
 
 def prepare_labels(labels):
