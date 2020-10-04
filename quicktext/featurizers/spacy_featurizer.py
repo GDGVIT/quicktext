@@ -9,7 +9,7 @@ class SpacyFeaturizer:
     and getting feature vectors
     """
 
-    def __init__(self, pad_token="@pad@"):
+    def __init__(self, model="en_core_web_md", pad_token="@pad@"):
         """
         Constructor function for SpacyFeaturizer class
         Args:
@@ -19,26 +19,7 @@ class SpacyFeaturizer:
         """
 
         self.nlp = en_core_web_md.load(disable=["ner", "tagger"])
-        self.tokenizer = Tokenizer(self.nlp.vocab)
         self.pad_token = pad_token
-
-    def tokenize(self, text):
-        """
-        Tokenizes the text using sPacy tokenizer
-        The tokens are in lowercase
-        Args:
-            text (string):The text to be tokenized
-        Returns:
-            List: The list of tokens 
-        """
-
-        tokens = self.tokenizer(text)
-
-        return [
-            token.text.lower()
-            for token in tokens
-            if token.text.strip() and not token.is_punct
-        ]
 
     def get_feature_vector(self, _list):
         """
