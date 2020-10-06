@@ -51,3 +51,7 @@ class Vocab:
     @property
     def itos(self):
         return self._itos
+
+    @property
+    def size(self):
+        return len(self._stoi)
