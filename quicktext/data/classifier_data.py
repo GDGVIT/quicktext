@@ -104,23 +104,23 @@ class TextClassifierData2(Dataset):
         seq_lens = torch.tensor(seq_lens)
 
         if self.featurizer:
-            text = [doc.tokens for doc in docs]
-            text = [self.featurizer.get_feature_vector(tokens) for tokens in text]
-            text = np.stack(text)
-            text = torch.from_numpy(text)
+            texts = [doc.tokens for doc in docs]
+            texts = [self.featurizer.get_feature_vector(tokens) for tokens in texts]
+            texts = np.stack(texts)
+            texts = torch.from_numpy(texts)
 
             batch = {
-                "vectors": text,
+                "inputs": texts,
                 "labels": labels,
                 "seq_lens": seq_lens,
             }
 
         else:
             ids = [np.array(doc.ids) for doc in docs]
-            ids = np.stack(text)
-            ids = torch.from_numpy(text)
+            ids = np.stack(ids)
+            ids = torch.from_numpy(ids)
 
-        batch = {"ids": text, "labels": labels, "seq_lens": seq_lens}
+            batch = {"inputs": ids, "labels": labels, "seq_lens": seq_lens}
 
     return batch
 
