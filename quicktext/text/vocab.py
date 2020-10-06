@@ -6,7 +6,7 @@ class Vocab:
     This class helps in building vocabulary 
     """
 
-    def __init__(self, pad_token="<pad>"):
+    def __init__(self, min_freq=3, pad_token="<pad>"):
         """
         Constructor function for Vocab class
         Args:
@@ -16,8 +16,9 @@ class Vocab:
         """
 
         self._pad_token = pad_token
+        self._min_freq = min_freq
 
-    def build(self, texts, min_freq):
+    def build(self, texts):
         """
         This function builds vocabulary using the input list of text
         Args:
@@ -28,14 +29,18 @@ class Vocab:
 
         print("[INFO] Building the vocabulary")
 
-        # Build dictionary of word -> index
-        self._stoi = {}
-        self._stoi[self._pad_token] = 0
-        index = 1
+        # Counter object
+        counter = Counter()
+
         for text in texts:
             for token in text:
-                self._stoi[token] = index
-                index += 1
+                counter[token] += 1
+
+        # Build dictionary of word -> index
+        words = [key for key in counter if counter[key] >= self._min_freq]
+
+        self._stoi = {word: idx + 1 for idx, word in enumerate(words)}
+        self._stoi[self._pad_token] = 0
 
         self._itos = {idx: word for (word, idx) in self._stoi.items()}
 
