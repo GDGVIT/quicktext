@@ -130,18 +130,24 @@ class TextClassifierData(Dataset):
     This class provides labels and tokenized and vectorized text
     """
 
-    def __init__(self, docs, labels):
+    def __init__(self, vocab, data):
         """
         Constructor function for TextClassifierData class
         Args:
-            texts (List): List of texts in dataset
-            labels (List): List of labels in dataset
+            data (List): List of tuples of form (text, label)
+            vocab (spacy.vocab): spaCy vocabulary class
         Returns:
             None
         """
+        self.vocab = vocab
+        self.tokenizer = Tokenizer(vocab)
+        self.data = data
 
-        self.labels = labels
-        self.docs = docs
+        oov_orth = self.vocab["@oov@"].orth
+        self.oov_id = self.vocab.vectors.key2row[oov_orth]
+
+        pad_orth = self.vocab["@pad@"].orth
+        self.pad_id = self.vocab.vectors.key2row[pad_orth]
 
     def __len__(self):
         """
@@ -152,7 +158,7 @@ class TextClassifierData(Dataset):
             int: Total length of the dataset
         """
 
-        return len(self.labels)
+        return len(self.data)
 
     def __getitem__(self, idx):
         """
@@ -160,14 +166,13 @@ class TextClassifierData(Dataset):
         Args:
             idx (int): The index of the data item in dataset
         Returns:
-            dict: A dictionary with text and label
+            dict: A dictionary with ids and label
         """
 
-        # Get doc and label
-        doc = self.docs[idx]
-        label = self.labels[idx]
+        text, label = self.data[idx]
+        ids = self.get_ids(text)
 
-        return {"doc": doc, "label": label}
+        return {"ids": ids, "label": label}
 
     def get_batch(self, batch):
         """
@@ -181,41 +186,64 @@ class TextClassifierData(Dataset):
         """
 
         # Retrieve data from batch
-        docs = [item["doc"] for item in batch]
+        ids = [item["ids"] for item in batch]
         labels = [item["label"] for item in batch]
 
         # Sort the list
-        docs, labels = map(
+        ids, labels = map(
             list,
             zip(
                 *sorted(
-                    zip(docs, labels),
-                    key=lambda _tuple: len(_tuple[0].tokens),
-                    reverse=True,
+                    zip(ids, labels), key=lambda _tuple: len(_tuple[0]), reverse=True,
                 )
             ),
         )
 
-        max_len = len(docs[0].tokens)
+        max_len = len(ids[0])
 
         # Initialize seq len list
         seq_lens = []
-        for doc in docs:
+        new_ids = []
+        for id in ids:
 
-            _len = len(doc.tokens)
+            _len = len(id)
             pad_len = max_len - _len
 
             if pad_len < 0:
-                doc.ids = doc.ids[:max_len]
-
-                doc.tokens = doc.tokens[:max_len]
+                id = id[:max_len]
             else:
-                doc.ids = np.pad(
-                    doc.ids, (0, pad_len), "constant", constant_values=0
+                id = np.pad(
+                    id, (0, pad_len), "constant", constant_values=self.pad_id
                 ).tolist()
 
-                doc.tokens = pad_tokens(doc.tokens, max_len)
+            new_ids.append(id)
 
             seq_lens.append(_len if _len < max_len else max_len)
 
-        return {"docs": docs, "labels": labels, "seq_lens": seq_lens}
+        labels = torch.tensor(labels)
+        seq_lens = torch.tensor(seq_lens)
+        text = np.stack(new_ids)
+        text = torch.from_numpy(text)
+
+        return {"labels": labels, "seq_lens": seq_lens, "texts": text}
+
+    def get_ids(self, text):
+        """
+        Maps tokens to ids in embedding layer
+        Args:
+            text (string): Text to be converted to ids
+        Returns:
+            list: A list of corresponding token ids
+        """
+
+        tokens = [token.orth for token in self.tokenizer(text)]
+        ids = []
+        for token in tokens:
+            try:
+                id = self.vocab.vectors.key2row[token]
+            except KeyError:
+                id = self.oov_id
+
+            ids.append(id)
+
+        return ids
