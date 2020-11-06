@@ -39,21 +39,19 @@ class CNN2D(pl.LightningModule):
         self.dropout = nn.Dropout(dropout)
         self.criterion = nn.CrossEntropyLoss()
 
-    def forward(self, vectors):
+    def forward(self, text):
 
         # text = [batch size, sent len]
 
-        #         embedded = self.embedding(text)
+        embedded = self.embedding(text)
 
         # embedded = [batch size, sent len, emb dim]
 
-        #         embedded = embedded.unsqueeze(1)
-        vectors = vectors.float()
-        vectors = vectors.unsqueeze(1)
+        embedded = embedded.unsqueeze(1)
 
         # embedded = [batch size, 1, sent len, emb dim]
 
-        conved = [F.relu(conv(vectors)).squeeze(3) for conv in self.convs]
+        conved = [F.relu(conv(embedded)).squeeze(3) for conv in self.convs]
 
         # conved_n = [batch size, n_filters, sent len - filter_sizes[n] + 1]
 
@@ -69,7 +67,7 @@ class CNN2D(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
 
-        text, text_lengths = batch["texts"], batch["seq_lens"]
+        text = batch["texts"]
 
         predictions = self(text).squeeze(1)
 
@@ -84,7 +82,7 @@ class CNN2D(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
 
-        text, text_lengths = batch["texts"], batch["seq_lens"]
+        text = batch["texts"]
 
         predictions = self(text).squeeze(1)
 
@@ -126,4 +124,6 @@ class CNN2D(pl.LightningModule):
         return {"val_loss": avg_loss, "val_acc": acc}
 
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters())
+        return torch.optim.Adam(
+            [param for param in self.parameters() if param.requires_grad == True]
+        )
