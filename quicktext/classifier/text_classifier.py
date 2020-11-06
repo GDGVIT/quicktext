@@ -7,7 +7,7 @@ class TextClassifier:
     This class contains the models and vocab
     """
 
-    def __init___(self, vocab, arch, classes, hparams):
+    def __init__(self, vocab, arch, classes, hparams):
         """
         Constructor class for TextClassifier
         Args:
@@ -18,16 +18,16 @@ class TextClassifier:
             None
         """
 
-        self.vocab = vocab
-        self.vocab.set_vector("@pad@", vector=np.zeros(self.vocab.vectors.shape[1]))
-        self.vocab.set_vector("@oov@", vector=np.zeros(self.vocab.vectors.shape[1]))
+        self._vocab = vocab
+        self._vocab.set_vector("@pad@", vector=np.zeros(self.vocab.vectors.shape[1]))
+        self._vocab.set_vector("@oov@", vector=np.zeros(self.vocab.vectors.shape[1]))
 
         self.classes = classes
 
         self.tokenizer = Tokenizer(self.vocab)
 
         if isinstance(arch, pl.LightningModule):
-            self.model = arch
+            self._model = arch
         elif isinstance(arch, str):
 
             INPUT_DIM, EMBEDDING_DIM = self.vocab.vectors.shape
@@ -36,7 +36,7 @@ class TextClassifier:
             OUTPUT_DIM = len(self.classes)
             DROPOUT = 0.5
             PAD_IDX = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
-            self.model = CNN2D(
+            self._model = CNN2D(
                 INPUT_DIM,
                 EMBEDDING_DIM,
                 N_FILTERS,
@@ -59,8 +59,8 @@ class TextClassifier:
 
     @property
     def vocab(self):
-        return self.vocab
+        return self._vocab
 
     @property
     def model(self):
-        return self.model
+        return self._model
