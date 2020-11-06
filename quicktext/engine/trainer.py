@@ -38,10 +38,10 @@ class Trainer:
 
         dataset = TextClassifierData(self.classifier.vocab, data)
         loader = DataLoader(
-            dataset, batch_size=self.batch_size, collate_fn=data.get_batch
+            dataset, batch_size=self.batch_size, collate_fn=dataset.get_batch
         )
         return loader
 
     def fit(self, epochs, gpus):
         trainer = pl.Trainer(max_epochs=epochs, gpus=gpus)
-        trainer.fit(self.classifier.model, self.train_loader ,self.val_loader)
+        trainer.fit(self.classifier.model, self.train_loader, self.val_loader)
