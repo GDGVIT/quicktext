@@ -56,3 +56,11 @@ class TextClassifier:
         """
 
         pass
+
+    @property
+    def vocab(self):
+        return self.vocab
+
+    @property
+    def model(self):
+        return self.model
