@@ -7,6 +7,8 @@ tests/__pycache__/
 quicktext/text/__pycache__/
 quicktext/datasets/__pycache__/
 quicktext/config/__pycache__/
+quicktext/classifier/__pycache__/
+quicktext/engine/__pycache__/
 
 # Lightning logs
 lightning_logs/
