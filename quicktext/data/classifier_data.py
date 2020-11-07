@@ -1,6 +1,5 @@
 from quicktext.imports import *
-from quicktext.data.utils import pad_tokens
-from quicktext.featurizers import SpacyFeaturizer
+
 
 __all__ = ["TextClassifierData"]
 

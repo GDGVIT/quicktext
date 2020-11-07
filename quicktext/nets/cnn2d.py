@@ -1,4 +1,5 @@
 from quicktext.imports import *
+from quicktext.nets.base import BaseModel
 
 """
 Code for the neural net based on a repo by bentrevett
@@ -6,6 +7,65 @@ https://github.com/bentrevett/pytorch-sentiment-analysis
 """
 
 __all__ = ["CNN2D"]
+
+
+class CNN2DFromBase(BaseModel):
+    def __init__(
+        self,
+        vocab_size,
+        embedding_dim,
+        n_filters,
+        filter_sizes,
+        output_dim,
+        dropout,
+        pad_idx,
+    ):
+
+        super(CNN2DFromBase, self).__init__()
+
+        self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=pad_idx)
+
+        self.convs = nn.ModuleList(
+            [
+                nn.Conv2d(
+                    in_channels=1,
+                    out_channels=n_filters,
+                    kernel_size=(fs, embedding_dim),
+                )
+                for fs in filter_sizes
+            ]
+        )
+
+        self.fc = nn.Linear(len(filter_sizes) * n_filters, output_dim)
+
+        self.dropout = nn.Dropout(dropout)
+        self.criterion = nn.CrossEntropyLoss()
+
+    def forward(self, text, seq_len):
+
+        # text = [batch size, sent len]
+
+        embedded = self.embedding(text)
+
+        # embedded = [batch size, sent len, emb dim]
+
+        embedded = embedded.unsqueeze(1)
+
+        # embedded = [batch size, 1, sent len, emb dim]
+
+        conved = [F.relu(conv(embedded)).squeeze(3) for conv in self.convs]
+
+        # conved_n = [batch size, n_filters, sent len - filter_sizes[n] + 1]
+
+        pooled = [F.max_pool1d(conv, conv.shape[2]).squeeze(2) for conv in conved]
+
+        # pooled_n = [batch size, n_filters]
+
+        cat = self.dropout(torch.cat(pooled, dim=1))
+
+        # cat = [batch size, n_filters * len(filter_sizes)]
+
+        return self.fc(cat)
 
 
 class CNN2D(pl.LightningModule):
