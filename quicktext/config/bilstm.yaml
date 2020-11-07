@@ -1,5 +1,6 @@
 # Configuration for BiLSTM Model
 
+vocab_size: 26000
 embedding_dim: 300
 hidden_dim: 128
 n_layers: 2

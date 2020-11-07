@@ -1,0 +1,8 @@
+# Configuration for CNN2D Model
+
+vocab_size: 26000
+embedding_dim: 300
+n_filters: 100
+filter_sizes: [3, 4, 5]
+dropout: 0.5
+pad_idx: 0
