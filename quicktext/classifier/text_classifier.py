@@ -1,5 +1,5 @@
 from quicktext.imports import *
-from quicktext.nets.cnn2d import CNN2D
+from quicktext.nets.cnn2d import CNN2D, CNN2DFromBase
 
 
 class TextClassifier:
@@ -22,6 +22,9 @@ class TextClassifier:
         self._vocab.set_vector("@pad@", vector=np.zeros(self.vocab.vectors.shape[1]))
         self._vocab.set_vector("@oov@", vector=np.zeros(self.vocab.vectors.shape[1]))
 
+        oov_orth = self._vocab["@oov@"].orth
+        self.oov_id = self._vocab.vectors.key2row[oov_orth]
+
         self.classes = classes
 
         self.tokenizer = Tokenizer(self.vocab)
@@ -36,7 +39,7 @@ class TextClassifier:
             OUTPUT_DIM = len(self.classes)
             DROPOUT = 0.5
             PAD_IDX = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
-            self._model = CNN2D(
+            self._model = CNN2DFromBase(
                 INPUT_DIM,
                 EMBEDDING_DIM,
                 N_FILTERS,
@@ -55,7 +58,12 @@ class TextClassifier:
             float: The label of the text
         """
 
-        pass
+        tokens = self.get_ids(text)
+        tokens = torch.tensor(tokens)
+        tokens = tokens.unsqueeze(0)
+        print(tokens.shape)
+        output = self.model(tokens, tokens.shape)
+        return output
 
     @property
     def vocab(self):
@@ -64,3 +72,24 @@ class TextClassifier:
     @property
     def model(self):
         return self._model
+
+    def get_ids(self, text):
+        """
+        Returns IDS for tokenized text
+        Args:
+            text (str): Text to be converted to ids
+        Return:
+            list: List of ints that map to the rows in embedding layer
+        """
+
+        tokens = [token.orth for token in self.tokenizer(text)]
+        ids = []
+        for token in tokens:
+            try:
+                id = self._vocab.vectors.key2row[token]
+            except KeyError:
+                id = self.oov_id
+
+            ids.append(id)
+
+        return ids
