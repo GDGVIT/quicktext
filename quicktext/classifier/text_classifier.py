@@ -46,7 +46,7 @@ class TextClassifier:
 
             if arch == "cnn":
 
-                self._model = CNN2DFromBase(output_dim, hparams)
+                self._model = CNN2D(output_dim, hparams)
 
             elif arch == "bilstm":
 
