@@ -28,7 +28,7 @@ class Trainer:
 
     def load_data(self, data):
         """
-        This function takes docs and labels to return 
+        This function takes data to return 
         a torch dataloader
         Args:
             data (list): list of tuples
@@ -43,5 +43,26 @@ class Trainer:
         return loader
 
     def fit(self, epochs, gpus):
+        """
+        This function trains the model
+        Args:
+            epochs (int): Number of epoch to train the model
+            gpus (int): Number of GPUs to use
+        Return:
+            None
+        """
+
         trainer = pl.Trainer(max_epochs=epochs, gpus=gpus)
         trainer.fit(self.classifier.model, self.train_loader, self.val_loader)
+
+    def test(self, gpus):
+        """
+        This function tests model using test set
+        Args:
+            gpus (int): The number of gpus
+        Returns:
+            None
+        """
+
+        trainer = pl.Trainer()
+        trainer.test(test_dataloader=self.test_loader)
