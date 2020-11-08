@@ -33,20 +33,13 @@ class TextClassifier:
             self._model = arch
         elif isinstance(arch, str):
 
-            INPUT_DIM, EMBEDDING_DIM = self.vocab.vectors.shape
-            N_FILTERS = 100
-            FILTER_SIZES = [3, 4, 5]
-            OUTPUT_DIM = len(self.classes)
-            DROPOUT = 0.5
-            PAD_IDX = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
+            input_dim, embedding_dim = self.vocab.vectors.shape
+            output_dim = len(self.classes)
+            pad_idx = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
+            hparams = {'pad_idx':pad_idx,'input_dim':input_dim, 'embedding_dim':embedding_dim}
             self._model = CNN2DFromBase(
-                INPUT_DIM,
-                EMBEDDING_DIM,
-                N_FILTERS,
-                FILTER_SIZES,
-                OUTPUT_DIM,
-                DROPOUT,
-                PAD_IDX,
+                output_dim,
+                hparams
             )
 
     def predict(self, text):
