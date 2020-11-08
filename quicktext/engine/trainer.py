@@ -65,4 +65,4 @@ class Trainer:
         """
 
         trainer = pl.Trainer()
-        trainer.test(test_dataloader=self.test_loader)
+        trainer.test(test_dataloaders=self.test_loader)
