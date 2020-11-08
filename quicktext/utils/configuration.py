@@ -1,5 +1,6 @@
 from quicktext.imports import *
 
+
 def read_yaml(path):
     """
     This function reads a YAML file
@@ -9,11 +10,12 @@ def read_yaml(path):
         dict: Parsed YAML file
     """
 
-    yaml_file = open(path) 
+    yaml_file = open(path)
     parsed_file = yaml.load(yaml_file, Loader=yaml.FullLoader)
     edict = EasyDict(parsed_file)
 
     return edict
+
 
 def merge_dictb_to_dicta(dicta, dictb):
     """
@@ -28,5 +30,5 @@ def merge_dictb_to_dicta(dicta, dictb):
 
     for key in dictb:
         dicta[key] = dictb[key]
-    
+
     return dicta
