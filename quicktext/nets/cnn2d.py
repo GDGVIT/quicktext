@@ -13,7 +13,7 @@ __all__ = ["CNN2D"]
 class CNN2D(BaseModel):
     def __init__(self, output_dim, hparams):
 
-        super(CNN2DFromBase, self).__init__()
+        super(CNN2D, self).__init__()
 
         main_dir = Path(os.path.dirname(os.path.realpath(__file__))).parent
         config_path = os.path.join(main_dir, "config/cnn2d.yml")
