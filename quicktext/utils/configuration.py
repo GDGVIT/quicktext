@@ -14,3 +14,19 @@ def read_yaml(path):
     edict = EasyDict(parsed_file)
 
     return edict
+
+def merge_dictb_to_dicta(dicta, dictb):
+    """
+    In this function dictb overrides dicta
+    replacing values in dicta or adding new values to it
+    Args:
+        dicta (dict): Dictionary with values
+        dictb (dict): Dictionary whose values will be written into dicta
+    Returns:
+        dict: It will return the updated dicta
+    """
+
+    for key in dictb:
+        dicta[key] = dictb[key]
+    
+    return dicta
