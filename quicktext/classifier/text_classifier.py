@@ -1,5 +1,7 @@
 from quicktext.imports import *
-from quicktext.nets.cnn2d import CNN2D, CNN2DFromBase
+from quicktext.nets.cnn2d import CNN2D
+from quicktext.nets.bi_lstm import BiLSTM
+from quicktext.nets.base import BaseModel
 
 
 class TextClassifier:
@@ -29,18 +31,32 @@ class TextClassifier:
 
         self.tokenizer = Tokenizer(self.vocab)
 
-        if isinstance(arch, pl.LightningModule):
+        input_dim, embedding_dim = self.vocab.vectors.shape
+        output_dim = len(self.classes)
+        pad_idx = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
+
+        hparams["pad_idx"] = pad_idx
+        hparams["input_dim"] = input_dim
+        hparams["embedding_dim"] = embedding_dim
+
+        if isinstance(arch, BaseModel):
             self._model = arch
+
         elif isinstance(arch, str):
 
-            input_dim, embedding_dim = self.vocab.vectors.shape
-            output_dim = len(self.classes)
-            pad_idx = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
-            hparams = {'pad_idx':pad_idx,'input_dim':input_dim, 'embedding_dim':embedding_dim}
-            self._model = CNN2DFromBase(
-                output_dim,
-                hparams
-            )
+            if arch == "cnn":
+
+                self._model = CNN2DFromBase(output_dim, hparams)
+
+            elif arch == "bilstm":
+
+                self._model = BiLSTM(output_dim, hparams)
+
+            else:
+                print("No such architecture exists")
+
+        else:
+            print("arch should be string or a torch file duh")
 
     def predict(self, text):
         """
@@ -54,8 +70,9 @@ class TextClassifier:
         tokens = self.get_ids(text)
         tokens = torch.tensor(tokens)
         tokens = tokens.unsqueeze(0)
-        print(tokens.shape)
-        output = self.model(tokens, tokens.shape)
+        text_length = torch.tensor([tokens.shape[1]])
+        print(text_length)
+        output = self.model(tokens, text_length)
         return output
 
     @property
