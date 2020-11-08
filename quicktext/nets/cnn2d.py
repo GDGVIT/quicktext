@@ -1,5 +1,6 @@
 from quicktext.imports import *
 from quicktext.nets.base import BaseModel
+from quicktext.utils.configuration  import read_yaml, merge_dictb_to_dicta
 
 """
 Code for the neural net based on a repo by bentrevett
@@ -12,33 +13,35 @@ __all__ = ["CNN2D"]
 class CNN2DFromBase(BaseModel):
     def __init__(
         self,
-        vocab_size,
-        embedding_dim,
-        n_filters,
-        filter_sizes,
-        output_dim,
-        dropout,
-        pad_idx,
+        output_dim, 
+        hparams
     ):
 
         super(CNN2DFromBase, self).__init__()
 
-        self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=pad_idx)
+        main_dir = Path(os.path.dirname(os.path.realpath(__file__))).parent
+        config_path = os.path.join(main_dir, 'config/cnn2d.yml')
+        default_hparams = read_yaml(config_path)
+        
+        hparams = merge_dictb_to_dicta(default_hparams, hparams)
+
+
+        self.embedding = nn.Embedding(hparams.vocab_size, hparams.embedding_dim, padding_idx=hparams.pad_idx)
 
         self.convs = nn.ModuleList(
             [
                 nn.Conv2d(
                     in_channels=1,
-                    out_channels=n_filters,
-                    kernel_size=(fs, embedding_dim),
+                    out_channels=hparams.n_filters,
+                    kernel_size=(fs, hparams.embedding_dim),
                 )
-                for fs in filter_sizes
+                for fs in hparams.filter_sizes
             ]
         )
 
-        self.fc = nn.Linear(len(filter_sizes) * n_filters, output_dim)
+        self.fc = nn.Linear(len(hparams.filter_sizes) * hparams.n_filters, output_dim)
 
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout(hparams.dropout)
         self.criterion = nn.CrossEntropyLoss()
 
     def forward(self, text, seq_len):
@@ -187,3 +190,15 @@ class CNN2D(pl.LightningModule):
         return torch.optim.Adam(
             [param for param in self.parameters() if param.requires_grad == True]
         )
+
+
+if __name__ == "__main__":
+    main_dir = Path(os.path.dirname(os.path.realpath(__file__))).parent
+    config_path = os.path.join(main_dir, 'config/cnn2d.yml')
+    hparams = read_yaml(config_path)
+    
+    uparams = {'pad_idx': 20001}
+
+    hparams = merge_dictb_to_dicta(hparams, uparams)
+    
+    print(hparams)
