@@ -9,7 +9,7 @@ class TextClassifier:
     This class contains the models and vocab
     """
 
-    def __init__(self, vocab=None, arch=None, classes=None, hparams=None):
+    def __init__(self, vocab, n_classes, arch="cnn", hparams={}):
         """
         Constructor class for TextClassifier
         Args:
@@ -27,12 +27,10 @@ class TextClassifier:
         oov_orth = self._vocab["@oov@"].orth
         self.oov_id = self._vocab.vectors.key2row[oov_orth]
 
-        self.classes = classes
-
         self.tokenizer = Tokenizer(self.vocab)
 
         input_dim, embedding_dim = self.vocab.vectors.shape
-        output_dim = len(self.classes)
+        output_dim = n_classes
         pad_idx = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
 
         hparams["pad_idx"] = pad_idx
