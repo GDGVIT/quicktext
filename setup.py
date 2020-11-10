@@ -38,7 +38,7 @@ py_versions = (
 def load_requirements(file_name="requirements.txt"):
     f = open("requirements.txt")
     requirements = f.readlines()
-    requirements = [requirement.strip() for requirement in requirements]
+    requirements = [requirement.strip() for requirement in requirements if requirement.strip()]
     f.close()
     return requirements
 
