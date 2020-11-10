@@ -250,8 +250,6 @@ class BaseModel(pl.LightningModule):
 
         print("Validation metrics : loss-", avg_loss, ", acc-", acc * 100)
 
-        self.write("This is printing something")
-        
         return None 
 
     def configure_optimizers(self):
