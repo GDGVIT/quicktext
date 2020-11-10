@@ -132,7 +132,7 @@ class BaseModel(pl.LightningModule):
             None
         """
         super().__init__()
-        self.epoch_count = 0
+        self.epoch_count = -1
 
     def forward(self, text, seq_len):
         """
@@ -230,7 +230,9 @@ class BaseModel(pl.LightningModule):
         acc = accuracy(preds, y)
 
         print(
-            "Training metrics : Loss-", avg_loss.item(), ", Accuracy-", acc.item() * 100
+            "Training metrics : Loss- {} Accuracy- {} ".format(
+                avg_loss.item(), acc.item() * 100
+            )
         )
 
         return None
@@ -251,9 +253,19 @@ class BaseModel(pl.LightningModule):
 
         acc = accuracy(preds, y)
 
-        print("-" * 50)
-        print("Epoch {} statistics".format(self.epoch_count))
-        print("Validation metrics : loss-", avg_loss.item(), ", acc-", acc.item() * 100)
+        if self.epoch_count > -1:
+            print("-" * 50)
+            print("Epoch {} statistics".format(self.epoch_count))
+            print(
+                "Validation metrics : Loss- {} Accuracy- {} ".format(
+                    avg_loss.item(), acc.item() * 100
+                )
+            )
+
+        else:
+            print("Validation sanity fit complete")
+
+        self.epoch_count += 1
 
         return None
 
