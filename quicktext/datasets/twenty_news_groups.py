@@ -2,6 +2,8 @@ import tarfile
 import urllib.request
 from quicktext.imports import *
 
+from quicktext.utils.data import load_from_directory
+
 
 def _download_20newsgroups(dataset_dir):
     """
@@ -23,5 +25,5 @@ def _download_20newsgroups(dataset_dir):
     urllib.request.urlretrieve(download_url, tar_dir)
 
     tar_file = tarfile.open(tar_dir)
-    tar_file.extractall(os.path.join(dataset_dir, target_dir))
+    tar_file.extractall(dataset_dir)
     tar_file.close()
