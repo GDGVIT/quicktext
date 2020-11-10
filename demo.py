@@ -11,10 +11,10 @@ print("[INFO] Loading spacy model")
 nlp = spacy.load("en_core_web_md")
 
 print("[INFO] Loading classifier data")
-classifier = TextClassifier(nlp.vocab, arch="cnn", classes=[0, 1], hparams={"param": 0})
+classifier = TextClassifier(nlp.vocab, n_classes=2)
 
 output = classifier.predict("This is text needs to be big")
-print(output)
+print(output.data)
 
 # print("[INFO] Preparing training data")
 # df = pd.read_csv(path)
