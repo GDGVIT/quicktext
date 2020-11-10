@@ -230,7 +230,7 @@ class BaseModel(pl.LightningModule):
 
         print("Training metrics : loss-", avg_loss, ", acc-", acc * 100)
 
-        return {"loss": avg_loss, "train_acc": acc}
+        return None
 
     def validation_epoch_end(self, outputs):
         """
@@ -250,7 +250,9 @@ class BaseModel(pl.LightningModule):
 
         print("Validation metrics : loss-", avg_loss, ", acc-", acc * 100)
 
-        return {"val_loss": avg_loss, "val_acc": acc}
+        self.write("This is printing something")
+        
+        return None 
 
     def configure_optimizers(self):
         """
