@@ -204,7 +204,7 @@ class BaseModel(pl.LightningModule):
     def _shared_eval(self, batch, batch_idx):
 
         text = batch["text"]
-        text_lengths = batch["text_lengths"]
+        text_lengths = batch["text_lengths"].cpu()
 
         prediction = self(text, text_lengths).squeeze(1)
         label = batch["label"].long()
