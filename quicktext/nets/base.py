@@ -152,11 +152,12 @@ class BaseModel(pl.LightningModule):
 
         prediction, loss = self._shared_eval(batch, batch_idx)
 
+        self.log("train_loss", loss)
+
         return {
             "loss": loss,
-            "predictions": prediction,
+            "prediction": prediction,
             "label": batch["label"],
-            "log": {"train_loss": loss},
         }
 
     def validation_step(self, batch, batch_idx):
@@ -171,11 +172,12 @@ class BaseModel(pl.LightningModule):
 
         prediction, loss = self._shared_eval(batch, batch_idx)
 
+        self.log("val_loss", loss)
+
         return {
             "val_loss": loss,
-            "predictions": prediction,
+            "prediction": prediction,
             "label": batch["label"],
-            "log": {"val_loss": loss},
         }
 
     def test_step(self, batch, batch_idx):
@@ -190,11 +192,12 @@ class BaseModel(pl.LightningModule):
 
         prediction, loss = self._shared_eval(batch, batch_idx)
 
+        self.log("test_loss", loss)
+
         return {
             "test_loss": loss,
             "prediction": prediction,
             "label": batch["label"],
-            "log": {"test_loss": loss},
         }
 
     def _shared_eval(self, batch, batch_idx):
