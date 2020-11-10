@@ -12,6 +12,7 @@ def read_yaml(path):
 
     yaml_file = open(path)
     parsed_file = yaml.load(yaml_file, Loader=yaml.FullLoader)
+    yaml_file.close()
     edict = EasyDict(parsed_file)
 
     return edict
