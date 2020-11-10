@@ -69,7 +69,7 @@ class TextClassifierData(Dataset):
         label = [item["label"] for item in batch]
 
         # Sort the list
-        ids, labels = map(
+        ids, label = map(
             list,
             zip(
                 *sorted(
@@ -104,7 +104,7 @@ class TextClassifierData(Dataset):
         text = np.stack(new_ids)
         text = torch.from_numpy(text)
 
-        return {"label": labels, "text_lengths": text_lengths, "text": text}
+        return {"label": label, "text_lengths": text_lengths, "text": text}
 
     def get_ids(self, text):
         """
