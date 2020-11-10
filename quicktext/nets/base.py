@@ -242,7 +242,7 @@ class BaseModel(pl.LightningModule):
         """
         avg_loss = torch.stack([x["val_loss"] for x in outputs]).mean()
         y = torch.cat([x["label"] for x in outputs])
-        y_hat = torch.cat([x["predictions"] for x in outputs])
+        y_hat = torch.cat([x["prediction"] for x in outputs])
 
         _, preds = torch.max(y_hat, 1)
 
