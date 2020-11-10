@@ -66,14 +66,14 @@ class TextClassifierData(Dataset):
 
         # Retrieve data from batch
         ids = [item["ids"] for item in batch]
-        labels = [item["label"] for item in batch]
+        label = [item["label"] for item in batch]
 
         # Sort the list
         ids, labels = map(
             list,
             zip(
                 *sorted(
-                    zip(ids, labels), key=lambda _tuple: len(_tuple[0]), reverse=True,
+                    zip(ids, label), key=lambda _tuple: len(_tuple[0]), reverse=True,
                 )
             ),
         )
@@ -81,7 +81,7 @@ class TextClassifierData(Dataset):
         max_len = len(ids[0])
 
         # Initialize seq len list
-        seq_lens = []
+        text_lengths = []
         new_ids = []
         for id in ids:
 
@@ -97,14 +97,14 @@ class TextClassifierData(Dataset):
 
             new_ids.append(id)
 
-            seq_lens.append(_len if _len < max_len else max_len)
+            text_lengths.append(_len if _len < max_len else max_len)
 
-        labels = torch.tensor(labels)
-        seq_lens = torch.tensor(seq_lens)
+        label = torch.tensor(label)
+        text_lengths = torch.tensor(text_lengths)
         text = np.stack(new_ids)
         text = torch.from_numpy(text)
 
-        return {"labels": labels, "seq_lens": seq_lens, "texts": text}
+        return {"label": labels, "text_lengths": text_lengths, "text": text}
 
     def get_ids(self, text):
         """

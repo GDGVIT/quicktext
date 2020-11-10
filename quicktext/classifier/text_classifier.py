@@ -9,7 +9,7 @@ class TextClassifier:
     This class contains the models and vocab
     """
 
-    def __init__(self, vocab, arch, classes, hparams):
+    def __init__(self, vocab, n_classes, arch="cnn", hparams={}):
         """
         Constructor class for TextClassifier
         Args:
@@ -27,12 +27,10 @@ class TextClassifier:
         oov_orth = self._vocab["@oov@"].orth
         self.oov_id = self._vocab.vectors.key2row[oov_orth]
 
-        self.classes = classes
-
         self.tokenizer = Tokenizer(self.vocab)
 
         input_dim, embedding_dim = self.vocab.vectors.shape
-        output_dim = len(self.classes)
+        output_dim = n_classes
         pad_idx = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
 
         hparams["pad_idx"] = pad_idx
@@ -103,3 +101,36 @@ class TextClassifier:
             ids.append(id)
 
         return ids
+
+    def save(self, directory):
+        """
+        Saves PyTorch model and sPacy vocab in directory
+        if directory doesnt exist its created
+        else contents overwritten
+        Args:
+            directory (str):  Directory where models will be stored
+        Returns:
+            None
+        """
+
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+
+        self._vocab.to_disk(os.path.join(directory, "spacy_vocab"))
+
+        torch.save(self._model, os.path.join(directory, "torch_model"))
+
+    def from_pretrained(self, directory):
+        """
+        Loads PyTorch model and sPacy vocab from directory
+        Args:
+            directory (str): Directory where models are stored
+        Returns:
+            None
+        """
+
+        if not os.path.exists(directory):
+            print("The path does not exists")
+
+        self._vocab = Vocab().from_disk(os.path.join(directory, "spacy_vocab"))
+        self._model = torch.load(os.path.join(directory, "torch_model"))

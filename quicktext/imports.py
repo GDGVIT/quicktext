@@ -20,8 +20,9 @@ from sklearn.model_selection import train_test_split
 
 # sPacy imports
 import spacy
+from spacy.vocab import Vocab
 from spacy.tokenizer import Tokenizer
-import en_core_web_md
+
 
 # Torch imports
 import torch
