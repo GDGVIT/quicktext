@@ -10,7 +10,7 @@ https://github.com/bentrevett/pytorch-sentiment-analysis
 __all__ = ["BiLSTM"]
 
 
-class BiLSTM(pl.LightningModule):
+class BiLSTM(BaseModel):
     def __init__(self, output_dim, hparams):
         super().__init__()
 

@@ -6,7 +6,6 @@ import logging
 # Utility imports
 from tqdm import tqdm
 import pickle
-import gdown
 import yaml
 import zipfile
 from pathlib import Path

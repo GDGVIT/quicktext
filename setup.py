@@ -1,6 +1,7 @@
 from pkg_resources import parse_version
 from configparser import ConfigParser
 import setuptools
+import os
 
 assert parse_version(setuptools.__version__) >= parse_version("36.2")
 
@@ -34,7 +35,23 @@ py_versions = (
     "2.0 2.1 2.2 2.3 2.4 2.5 2.6 2.7 3.0 3.1 3.2 3.3 3.4 3.5 3.6 3.7 3.8".split()
 )
 
-requirements = cfg.get("requirements", "").split()
+
+def load_requirements(path_dir='./', file_name='requirements.txt', comment_char='#'):
+    with open(os.path.join(path_dir, file_name), 'r') as file:
+        lines = [ln.strip() for ln in file.readlines()]
+    reqs = []
+    for ln in lines:
+        # filer all comments
+        if comment_char in ln:
+            ln = ln[:ln.index(comment_char)].strip()
+        # skip directly installed dependencies
+        if ln.startswith('http'):
+            continue
+        if ln:  # if requirement is not empty
+            reqs.append(ln)
+
+
+requirements = load_requirements()
 lic = licenses[cfg["license"]]
 min_python = cfg["min_python"]
 
