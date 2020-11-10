@@ -36,16 +36,16 @@ py_versions = (
 )
 
 
-def load_requirements(path_dir='./', file_name='requirements.txt', comment_char='#'):
-    with open(os.path.join(path_dir, file_name), 'r') as file:
+def load_requirements(path_dir="./", file_name="requirements.txt", comment_char="#"):
+    with open(os.path.join(path_dir, file_name), "r") as file:
         lines = [ln.strip() for ln in file.readlines()]
     reqs = []
     for ln in lines:
         # filer all comments
         if comment_char in ln:
-            ln = ln[:ln.index(comment_char)].strip()
+            ln = ln[: ln.index(comment_char)].strip()
         # skip directly installed dependencies
-        if ln.startswith('http'):
+        if ln.startswith("http"):
             continue
         if ln:  # if requirement is not empty
             reqs.append(ln)
