@@ -33,3 +33,16 @@ def load_from_directory(directory):
 
     payload = EasyDict({"data": data, "target": target, "target_names": target_names})
     return payload
+
+
+def convert_to_x_y(data):
+    """
+    Converts data into form x,y 
+    Args:
+        data (dict): With keys data, target 
+    Returns:
+        list: A tuple of form (x,y)
+    """
+
+    data = [(data.data[idx], data.target[idx]) for idx in range(len(data.target))]
+    return data
