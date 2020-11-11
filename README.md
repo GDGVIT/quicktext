@@ -23,13 +23,12 @@
 [![codecov](https://codecov.io/gh/picturate/qtc/branch/master/graph/badge.svg)](https://codecov.io/gh/picturate/qtc)
 * * * * *
 
+<img src="images/demo.png" alt="demo">
+
+
 QuickText is a text classification framework with two main features:
 - Fast training and inference
 - Simple and easy training pipeline 
-
-QuickText is built on top of sPacy and PyTorch and the components provided can be extended and modified if required
-
-- [More about QuickText](#more-about-quicktext)
 
 
 ## Available Models
@@ -40,14 +39,4 @@ QuickText is built on top of sPacy and PyTorch and the components provided can b
 | CNN2D| 2D Convolutional Net  | [Click here]() |
 
 > We are currently adding more models to this framework
-
-## More About QuickText
-
-QuickText uses the following libraries
-
-| Library | Used for |
-| ---- | --- |
-| [**sPacy**](https://spacy.io/) | Text processing and getting feature vectors |
-| [**PyTorch**](https://pytorch.org/) | Building neural networks for text classification |
-| [**Pytorch_lightning**](https://pytorch-lightning.readthedocs.io/en/stable/) | Model training |
 
