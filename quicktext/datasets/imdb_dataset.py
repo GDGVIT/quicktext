@@ -142,7 +142,7 @@ def get_imdb(subset="train", shuffle=True, random_state=42, return_x_y=False):
 
         if return_x_y:
             train_data = convert_to_x_y(data.train)
-            val_data = convert_to_x_y(data)
+            val_data = convert_to_x_y(data.val)
             data = EasyDict({"train": {"data": train_data}, "val": {"data": val_data}})
 
     elif subset == "test":
