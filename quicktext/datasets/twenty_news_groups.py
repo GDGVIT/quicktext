@@ -139,16 +139,16 @@ def get_20newsgroups(
         {
             "train": {"data": train_data, "target": val_target},
             "val": {"data": val_data, "target": val_target},
-            "test": {"data":test_data, "target": test_target}
+            "test": {"data": test_data, "target": test_target},
         }
     )
 
     if return_x_y:
-    
-            train_data = convert_to_x_y(data.train)
-            val_data = convert_to_x_y(data.val)
-            test_data = convert_to_x_y(data.test)
 
-            data = EasyDict({"train": train_data, "val": val_data, "test":test_data})
+        train_data = convert_to_x_y(data.train)
+        val_data = convert_to_x_y(data.val)
+        test_data = convert_to_x_y(data.test)
+
+        data = EasyDict({"train": train_data, "val": val_data, "test": test_data})
 
     return data
