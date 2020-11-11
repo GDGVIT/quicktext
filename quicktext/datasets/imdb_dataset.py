@@ -128,11 +128,13 @@ def get_imdb(shuffle=True, random_state=42, return_x_y=False):
         data.train.data, data.train.target, test_size=0.2, random_state=random_state
     )
 
-    data.train.data = train_data
-    data.train.target = train_target
-
-    data.val.data = val_data
-    data.val.target = val_target
+    data = EasyDict(
+        {
+            "train": {"data": train_data, "target": train_target},
+            "val": {"data": val_data, "target": val_target},
+            "test": {"data": data.test.data, "target": data.test.target},
+        }
+    )
 
     if return_x_y:
         train_data = convert_to_x_y(data.train)
