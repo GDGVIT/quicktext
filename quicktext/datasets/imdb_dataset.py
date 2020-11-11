@@ -102,13 +102,12 @@ def bulk_read_files(target_dir):
     return data
 
 
-def get_imdb(subset="train", shuffle=True, random_state=42, return_x_y=False):
+def get_imdb(shuffle=True, random_state=42, return_x_y=False):
     """
     Loads aclImdb dataset 
     This dataset has 25,000 samples in training and validation 
     And 25,000 samples for test
     Args:
-        subset (str): The subset of data to return
         shuffle (boolean): Shuffles data if set to True
         random_state (int): Random state kept while splitting data into train val and test
         remove (list): List of metadata to remove from the 20newsgroups dataset
@@ -123,39 +122,29 @@ def get_imdb(subset="train", shuffle=True, random_state=42, return_x_y=False):
 
     _download_imdb_dataset(dataset_dir)
 
-    imdb_data = parse_aclimdb_dataset(target_dir)
+    data = parse_aclimdb_dataset(target_dir)
 
-    if subset == "train":
-        text = imdb_data.train.data
-        target = imdb_data.train.target
+    train_data, val_data, train_target, val_target = train_test_split(
+        data.train.data, data.train.target, test_size=0.2, random_state=random_state
+    )
 
-        train_data, val_data, train_target, val_target = train_test_split(
-            text, target, test_size=0.2, random_state=random_state
-        )
+    data.train.data = train_data
+    data.train.target = train_target
+
+    data.val.data = val_data
+    data.val.target = val_target
+
+    if return_x_y:
+        train_data = convert_to_x_y(data.train)
+        val_data = convert_to_x_y(data.val)
+        test_data = convert_to_x_y(data.test)
 
         data = EasyDict(
             {
-                "train": {"data": train_data, "target": train_target},
-                "val": {"data": val_data, "target": val_target},
+                "train": {"data": train_data},
+                "val": {"data": val_data},
+                "test": {"data": test_data},
             }
         )
-
-        if return_x_y:
-            train_data = convert_to_x_y(data.train)
-            val_data = convert_to_x_y(data.val)
-            data = EasyDict({"train": {"data": train_data}, "val": {"data": val_data}})
-
-    elif subset == "test":
-        test_data = imdb_data.test.data
-        test_target = imdb_data.test.target
-
-        data = EasyDict({"test": {"data": test_data, "target": test_target}})
-
-        if return_x_y:
-            test_data = convert_to_x_y(data.test)
-            data = EasyDict({"test": {"data": test_data}})
-
-    else:
-        print("No such subset exists")
 
     return data
