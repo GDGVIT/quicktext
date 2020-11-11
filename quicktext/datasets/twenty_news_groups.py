@@ -93,7 +93,6 @@ def strip_newsgroup_footer(text):
 
 
 def get_20newsgroups(
-    subset="train",
     shuffle=True,
     random_state=42,
     remove=[],
@@ -104,7 +103,6 @@ def get_20newsgroups(
     Loads the files from 20 news groups dataset 
     Also the files are processed on demand using arguments from remove
     Args:
-        subset (str): The subset of data to return
         shuffle (boolean): Shuffles data if set to True
         random_state (int): Random state kept while splitting data into train val and test
         remove (list): List of metadata to remove from the 20newsgroups dataset
@@ -129,42 +127,28 @@ def get_20newsgroups(
     if "quotes" in remove:
         data.data = [strip_newsgroup_quoting(text) for text in data.data]
 
-    if subset == "train":
+    train_data, test_data, train_target, test_target = train_test_split(
+        data.data, data.target, test_size=0.2, random_state=random_state
+    )
 
-        train_data, test_data, train_target, test_target = train_test_split(
-            data.data, data.target, test_size=0.2, random_state=random_state
-        )
+    train_data, val_data, train_target, val_target = train_test_split(
+        train_data, train_target, test_size=0.2, random_state=random_state
+    )
 
-        train_data, val_data, train_target, val_target = train_test_split(
-            train_data, train_target, test_size=0.2, random_state=random_state
-        )
+    data = EasyDict(
+        {
+            "train": {"data": train_data, "target": val_target},
+            "val": {"data": val_data, "target": val_target},
+            "test": {"data":test_data, "target": test_target}
+        }
+    )
 
-        data = EasyDict(
-            {
-                "train": {"data": train_data, "target": val_target},
-                "val": {"data": val_data, "target": val_target},
-            }
-        )
-
-        if return_x_y:
+    if return_x_y:
+    
             train_data = convert_to_x_y(data.train)
             val_data = convert_to_x_y(data.val)
-            data = EasyDict({"train": train_data, "val": val_data})
-
-    elif subset == "test":
-
-        train_data, test_data, train_target, test_target = train_test_split(
-            data.data, data.target, test_size=0.2, random_state=random_state
-        )
-
-        data = EasyDict({"test": {"data": test_data, "target": test_target}})
-
-        if return_x_y:
             test_data = convert_to_x_y(data.test)
-            data = EasyDict({"test": {"data": test_data}})
 
-    else:
-
-        print("No such subset exists")
+            data = EasyDict({"train": train_data, "val": val_data, "test":test_data})
 
     return data
