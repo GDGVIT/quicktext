@@ -5,6 +5,7 @@ from scikit-learn. The design of this dataset utility is also adapted from there
 https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/datasets/_twenty_newsgroups.py
 """
 
+import re
 import tarfile
 import urllib.request
 from quicktext.imports import *
