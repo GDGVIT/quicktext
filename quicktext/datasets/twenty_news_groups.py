@@ -92,7 +92,12 @@ def strip_newsgroup_footer(text):
 
 
 def get_20newsgroups(
-    subset="train", shuffle=True, random_state=42, remove=[], return_x_y=False
+    subset="train",
+    shuffle=True,
+    random_state=42,
+    remove=[],
+    return_x_y=False,
+    dataset_dir="quicktext_data",
 ):
     """
     Loads the files from 20 news groups dataset 
@@ -108,7 +113,6 @@ def get_20newsgroups(
         or it could return a list of tuples of form (text, label)
     """
 
-    dataset_dir = "qt_dataset"
     target_dir = os.path.join(dataset_dir, "20_newsgroups")
 
     _download_20newsgroups(dataset_dir)
