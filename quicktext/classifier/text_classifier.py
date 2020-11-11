@@ -1,3 +1,5 @@
+import en_core_web_md
+
 from quicktext.imports import *
 from quicktext.nets.cnn2d import CNN2D
 from quicktext.nets.bi_lstm import BiLSTM
@@ -9,7 +11,7 @@ class TextClassifier:
     This class contains the models and vocab
     """
 
-    def __init__(self, vocab, n_classes, arch="cnn", hparams={}):
+    def __init__(self, n_classes, arch="cnn", vocab=None, hparams={}):
         """
         Constructor class for TextClassifier
         Args:
@@ -20,7 +22,11 @@ class TextClassifier:
             None
         """
 
-        self._vocab = vocab
+        if isinstance(vocab, Vocab):
+            self._vocab = vocab
+        else:
+            self._vocab = en_core_web_md.load().vocab
+
         self._vocab.set_vector("@pad@", vector=np.zeros(self.vocab.vectors.shape[1]))
         self._vocab.set_vector("@oov@", vector=np.zeros(self.vocab.vectors.shape[1]))
 
