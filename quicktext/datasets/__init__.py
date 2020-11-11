@@ -1,0 +1,1 @@
+from .twenty_news_groups import get_20newsgroups
