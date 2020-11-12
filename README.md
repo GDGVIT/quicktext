@@ -12,7 +12,7 @@
 
 
 * * * * *
->**Note: This library is still work in progress**
+>**Note: This project is still work in progress**
     All contributions are welcome
     Feel free to request any feature or report bugs by creating an issue for it
 
@@ -28,11 +28,6 @@
 <img src="images/demo.png" alt="demo">
 
 
-QuickText is a text classification framework with two main features:
-- Fast training and inference
-- Simple and easy training pipeline 
-
-
 ## Available Models
 
 | Model Class | Name | Docs |
@@ -42,6 +37,32 @@ QuickText is a text classification framework with two main features:
 
 > We are currently adding more models to this framework
 
+
+
+## Contributors
+
+<table>
+<tr align="center">
+
+
+<td>
+
+Ramaneswaran
+
+<p align="center">
+<img src = "https://avatars0.githubusercontent.com/u/51799927?s=460&u=3a1e26881d54bc1c4cf2719f976aaa6783db0f54&v=4" width="150" height="150" alt="Raman">
+</p>
+<p align="center">
+
+<a href = "https://github.com/ramaneswaran"><img src = "http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height = "36"/></a>
+<a href = "https://www.linkedin.com/in/ramaneswaran-s-76622416b/">
+
+<img src = "http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36"/>
+</a>
+</p>
+</td>
+</tr>
+</table>
 
 <p align="center">
 	Made with :heart: by <a href="https://dscvit.com">DSC VIT</a>
