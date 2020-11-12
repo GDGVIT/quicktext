@@ -1,9 +1,11 @@
 
-<div align="center">
-    <img src="images/banner.jpg" width=400 height=100 alt="Banner">
-	<h4 align="center"> A Fast & Simple Text Detection Framework  <h4>
-
-</div>
+<p align="center">
+<a href="https://dscvit.com">
+	<img src="https://user-images.githubusercontent.com/30529572/72455010-fb38d400-37e7-11ea-9c1e-8cdeb5f5906e.png" />
+</a>
+	<h2 align="center"> QuickText </h2>
+	<h4 align="center"> Quick and simple text classification framework <h4>
+</p>
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![DOCS](https://img.shields.io/badge/Docs-latest-green.svg)](https://picturate.github.io/quickTextCassifier/) 
@@ -39,4 +41,9 @@ QuickText is a text classification framework with two main features:
 | CNN2D| 2D Convolutional Net  | [Click here]() |
 
 > We are currently adding more models to this framework
+
+
+<p align="center">
+	Made with :heart: by <a href="https://dscvit.com">DSC VIT</a>
+</p>
 
