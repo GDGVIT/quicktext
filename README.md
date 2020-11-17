@@ -1,7 +1,7 @@
 
 <p align="center">
 <a href="https://dscvit.com">
-	<img src="https://user-images.githubusercontent.com/30529572/72455010-fb38d400-37e7-11ea-9c1e-8cdeb5f5906e.png" />
+	<img src="https://user-images.githubusercontent.com/30529572/72455010-fb38d400-37e7-11ea-9c1e-8cdeb5f5906e.png" alt="DSC VIT Logo"/>
 </a>
 	<h2 align="center"> QuickText </h2>
 	<h4 align="center"> Quick and simple text classification framework <h4>
