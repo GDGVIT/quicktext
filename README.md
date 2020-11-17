@@ -54,10 +54,10 @@ Ramaneswaran
 </p>
 <p align="center">
 
-<a href = "https://github.com/ramaneswaran"><img src = "http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height = "36"/></a>
+<a href = "https://github.com/ramaneswaran"><img src = "http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" alt="profile" width="36" height = "36"/></a>
 <a href = "https://www.linkedin.com/in/ramaneswaran-s-76622416b/">
 
-<img src = "http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36"/>
+<img src = "http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36" alt="linkedin"/>
 </a>
 </p>
 </td>
