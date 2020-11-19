@@ -1,6 +1,6 @@
 from quicktext.imports import *
 from quicktext.data.classifier_data import TextClassifierData
-
+from quicktext.nets.base import BaseModel
 
 class Trainer:
     """
@@ -18,8 +18,8 @@ class Trainer:
         Returns:   
             None
         """
-
-        self.classifier = classifier
+        self.classifier =  classifier
+        self.pl_model = BaseModel(classifier.model)
 
     def load_data(self, data, batch_size):
         """
@@ -56,7 +56,7 @@ class Trainer:
             ngpus = 1
 
         trainer = pl.Trainer(max_epochs=epochs, gpus=ngpus)
-        trainer.fit(self.classifier.model, train_loader, val_loader)
+        trainer.fit(self.pl_model, train_loader, val_loader)
 
     def test(self, test, batch_size=32, gpu=False, ngpus=0):
         """
