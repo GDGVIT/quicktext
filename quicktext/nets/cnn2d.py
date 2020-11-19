@@ -10,10 +10,10 @@ https://github.com/bentrevett/pytorch-sentiment-analysis
 __all__ = ["CNN2D"]
 
 
-class CNN2D(BaseModel):
+class CNN2D(nn.Module):
     def __init__(self, output_dim, hparams):
 
-        super(CNN2D, self).__init__()
+        super().__init__()
 
         main_dir = Path(os.path.dirname(os.path.realpath(__file__))).parent
         config_path = os.path.join(main_dir, "config/cnn2d.yml")

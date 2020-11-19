@@ -6,7 +6,7 @@ class BaseModel(pl.LightningModule):
     Base model for text classifier architectures
     """
 
-    def __init__(self):
+    def __init__(self, model):
         """
         Constructor function for BaseModel
         Args:
@@ -16,13 +16,15 @@ class BaseModel(pl.LightningModule):
         """
         super().__init__()
         self.epoch_count = -1
+        self.model = model
+        self.criterion = nn.CrossEntropyLoss()
 
     def forward(self, text, seq_len):
         """
         Forward function to define model architecture
         """
 
-        pass
+        return self.model(text, seq_len)
 
     def training_step(self, batch, batch_idx):
         """

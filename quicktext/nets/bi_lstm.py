@@ -10,7 +10,7 @@ https://github.com/bentrevett/pytorch-sentiment-analysis
 __all__ = ["BiLSTM"]
 
 
-class BiLSTM(BaseModel):
+class BiLSTM(nn.Module):
     def __init__(self, output_dim, hparams):
         super().__init__()
 
