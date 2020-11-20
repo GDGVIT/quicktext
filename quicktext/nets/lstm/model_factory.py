@@ -7,15 +7,12 @@ Code for the neural net based on a repo by bentrevett
 https://github.com/bentrevett/pytorch-sentiment-analysis
 """
 
-__all__ = ["BiLSTM"]
-
-
 class BiLSTM(nn.Module):
     def __init__(self, output_dim, hparams):
         super().__init__()
 
-        main_dir = Path(os.path.dirname(os.path.realpath(__file__))).parent
-        config_path = os.path.join(main_dir, "config/bilstm.yml")
+        base_dir = os.path.dirname(os.path.realpath(__file__))
+        config_path = os.path.join(base_dir, "config.yml")
         default_hparams = read_yaml(config_path)
 
         hparams = merge_dictb_to_dicta(default_hparams, hparams)

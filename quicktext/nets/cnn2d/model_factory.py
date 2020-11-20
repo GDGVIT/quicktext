@@ -7,16 +7,13 @@ Code for the neural net based on a repo by bentrevett
 https://github.com/bentrevett/pytorch-sentiment-analysis
 """
 
-__all__ = ["CNN2D"]
-
-
 class CNN2D(nn.Module):
     def __init__(self, output_dim, hparams):
 
         super().__init__()
 
-        main_dir = Path(os.path.dirname(os.path.realpath(__file__))).parent
-        config_path = os.path.join(main_dir, "config/cnn2d.yml")
+        main_dir = os.path.dirname(os.path.realpath(__file__))
+        config_path = os.path.join(main_dir, "config.yml")
         default_hparams = read_yaml(config_path)
 
         hparams = merge_dictb_to_dicta(default_hparams, hparams)
