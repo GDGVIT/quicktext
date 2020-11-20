@@ -1,8 +1,8 @@
 import en_core_web_md
 
 from quicktext.imports import *
-from quicktext.nets.cnn2d import CNN2D
-from quicktext.nets.bi_lstm import BiLSTM
+from quicktext.nets.cnn2d.model_factory import CNN2D
+from quicktext.nets.lstm.model_factory import BiLSTM
 from quicktext.nets.base import BaseModel
 
 
