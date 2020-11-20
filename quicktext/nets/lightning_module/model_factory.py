@@ -20,8 +20,8 @@ class BaseModel(pl.LightningModule):
         self.criterion = nn.CrossEntropyLoss()
 
         self.accuracy = Accuracy()
-        self.precision = Precision(num_class)
-        self.recall = Recall(num_class)
+        self.precision_score = Precision(num_class)
+        self.recall_score = Recall(num_class)
 
     def forward(self, text, seq_len):
         """
@@ -117,8 +117,8 @@ class BaseModel(pl.LightningModule):
         _, preds = torch.max(y_hat, 1)
 
         acc = self.accuracy(preds, y)
-        pre = self.precision(preds, y)
-        rec = self.recall(preds, y)
+        pre = self.precision_score(preds, y)
+        rec = self.recall_score(preds, y)
 
         print(
             "Training metrics : Loss- {} Accuracy- {} ".format(
@@ -142,7 +142,9 @@ class BaseModel(pl.LightningModule):
 
         _, preds = torch.max(y_hat, 1)
 
-        acc = accuracy(preds, y)
+        acc = self.accuracy(preds, y)
+        pre = self.precision_score(preds, y)
+        rec = self.recall_score(preds, y)
 
         if self.epoch_count > -1:
             print("-" * 50)
