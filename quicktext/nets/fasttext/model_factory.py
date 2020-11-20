@@ -10,7 +10,16 @@ https://github.com/AnubhavGupta3377/Text-Classification-Models-Pytorch
 class FastText(nn.Module):
     def __init__(self, n_classes=2, config=None):
         super(FastText, self).__init__()
-        self.config = config
+
+        main_dir = os.path.dirname(os.path.realpath(__file__))
+        config_path = os.path.join(main_dir, "config.yml")
+        default_config = read_yaml(config_path)
+
+        config = (
+            merge_dictb_to_dicta(default_config, config)
+            if config is not None
+            else default_config
+        )
 
         # Embedding Layer
         self.embeddings = nn.Embedding(self.config.vocab_size, self.config.embed_size)

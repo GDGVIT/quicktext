@@ -9,30 +9,34 @@ https://github.com/bentrevett/pytorch-sentiment-analysis
 
 
 class BiLSTM(nn.Module):
-    def __init__(self, output_dim, hparams):
+    def __init__(self, output_dim, config=None):
         super().__init__()
 
-        base_dir = os.path.dirname(os.path.realpath(__file__))
-        config_path = os.path.join(base_dir, "config.yml")
-        default_hparams = read_yaml(config_path)
+        main_dir = os.path.dirname(os.path.realpath(__file__))
+        config_path = os.path.join(main_dir, "config.yml")
+        default_config = read_yaml(config_path)
 
-        hparams = merge_dictb_to_dicta(default_hparams, hparams)
+        config = (
+            merge_dictb_to_dicta(default_config, config)
+            if config is not None
+            else default_config
+        )
 
         self.embedding = nn.Embedding(
-            hparams.vocab_size, hparams.embedding_dim, padding_idx=hparams.pad_idx
+            config.vocab_size, config.embedding_dim, padding_idx=config.pad_idx
         )
 
         self.rnn = nn.LSTM(
-            hparams.embedding_dim,
-            hparams.hidden_dim,
-            num_layers=hparams.n_layers,
-            bidirectional=hparams.bidirectional,
-            dropout=hparams.dropout,
+            config.embedding_dim,
+            config.hidden_dim,
+            num_layers=config.n_layers,
+            bidirectional=config.bidirectional,
+            dropout=config.dropout,
         )
 
-        self.fc = nn.Linear(hparams.hidden_dim * 2, output_dim)
+        self.fc = nn.Linear(config.hidden_dim * 2, output_dim)
 
-        self.dropout = nn.Dropout(hparams.dropout)
+        self.dropout = nn.Dropout(config.dropout)
 
         self.criterion = nn.CrossEntropyLoss()
 
