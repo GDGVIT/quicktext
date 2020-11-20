@@ -14,7 +14,7 @@ class TextClassifier:
     This class contains the models and vocab
     """
 
-    def __init__(self, n_classes, arch="cnn2d", vocab=None, config={}):
+    def __init__(self, num_class, arch="cnn2d", vocab=None, config={}):
         """
         Constructor class for TextClassifier
         Args:
@@ -24,6 +24,8 @@ class TextClassifier:
         Returns:
             None
         """
+
+        self._num_class = num_class
 
         if isinstance(vocab, Vocab):
             self._vocab = vocab
@@ -39,7 +41,7 @@ class TextClassifier:
         self.tokenizer = Tokenizer(self.vocab)
 
         input_dim, embedding_dim = self.vocab.vectors.shape
-        output_dim = n_classes
+        output_dim = num_class
         pad_idx = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
 
         config["pad_idx"] = pad_idx
@@ -98,6 +100,10 @@ class TextClassifier:
     @property
     def model(self):
         return self._model
+
+    @property
+    def num_class(self):
+        return self._num_class
 
     def get_ids(self, text):
         """
