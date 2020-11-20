@@ -8,7 +8,7 @@ https://github.com/AnubhavGupta3377/Text-Classification-Models-Pytorch
 
 
 class FastText(nn.Module):
-    def __init__(self, n_classes=2, config=None):
+    def __init__(self, num_class=2, config=None):
         super(FastText, self).__init__()
 
         main_dir = os.path.dirname(os.path.realpath(__file__))
@@ -28,7 +28,7 @@ class FastText(nn.Module):
         self.fc1 = nn.Linear(config.embed_size, config.hidden_size)
 
         # Output Layer
-        self.fc2 = nn.Linear(config.hidden_size, config.output_size)
+        self.fc2 = nn.Linear(config.hidden_size, num_class)
 
     def forward(self, x, text_lengths):
 
