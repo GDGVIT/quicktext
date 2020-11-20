@@ -1,11 +1,11 @@
 site_name: "QuickText"
 theme:
-  name: "readthedocs"
+  name: "material"
   palette:
     primary: "dark-blue"
     accent: "dark-blue"
     # scheme: slate Use this for dark mode
-    scheme: slate
+    scheme: default
     # scheme: default Use this for light mode
 
 docs_dir: templates
@@ -26,4 +26,13 @@ extra_javascript:
 
 nav:
   - Home: index.md
-
+  - Getting Started:
+      - Quickstart: quickstart.md
+  - Model:
+      - BiLSTM: bilstm.md
+      - CNN2D: cnn2d.md
+      - FastText: fasttext.md
+      - RCNN: rcnn.md
+      - Seq2seq: seq2seq.md
+  - API Reference:
+      - TextClassifier: text_classifier.md
