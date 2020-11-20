@@ -7,6 +7,7 @@ Code for the neural net based on a repo by bentrevett
 https://github.com/bentrevett/pytorch-sentiment-analysis
 """
 
+
 class CNN2D(nn.Module):
     def __init__(self, output_dim, hparams):
 

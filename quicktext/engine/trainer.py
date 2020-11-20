@@ -2,6 +2,7 @@ from quicktext.imports import *
 from quicktext.data.classifier_data import TextClassifierData
 from quicktext.nets.base import BaseModel
 
+
 class Trainer:
     """
     This class is used to train the models in quicktext
@@ -18,7 +19,7 @@ class Trainer:
         Returns:   
             None
         """
-        self.classifier =  classifier
+        self.classifier = classifier
         self.pl_model = BaseModel(classifier.model)
 
     def load_data(self, data, batch_size):
