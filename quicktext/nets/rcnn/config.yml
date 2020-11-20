@@ -1,0 +1,9 @@
+# Configuration for RCNN Model
+
+embed_size: 300
+hidden_layers: 1
+hidden_size: 64
+hidden_size_linear: 64
+dropout_keep: 0.8
+lr: 0.5
+vocab_size: 26000
