@@ -114,7 +114,8 @@ def get_20newsgroups(
 
     target_dir = os.path.join(dataset_dir, "20_newsgroups")
 
-    _download_20newsgroups(dataset_dir)
+    if not os.path.exists(target_dir):
+        _download_20newsgroups(dataset_dir)
 
     data = load_from_directory(target_dir)
 

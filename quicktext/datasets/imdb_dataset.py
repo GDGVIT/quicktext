@@ -120,7 +120,8 @@ def get_imdb(shuffle=True, random_state=42, return_x_y=False):
     dataset_dir = "qt_dataset"
     target_dir = os.path.join(dataset_dir, "aclImdb")
 
-    _download_imdb_dataset(dataset_dir)
+    if not os.path.exists(target_dir):
+        _download_imdb_dataset(dataset_dir)
 
     data = parse_aclimdb_dataset(target_dir)
 
