@@ -20,8 +20,7 @@ class Trainer:
             None
         """
         self.classifier = classifier
-        self.pl_model = BaseModel(classifier.model)
-        self.num_class = classifier.num_class
+        self.pl_model = BaseModel(classifier.model, classifier.num_class)
 
     def load_data(self, data, batch_size):
         """

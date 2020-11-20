@@ -6,7 +6,7 @@ class BaseModel(pl.LightningModule):
     Base model for text classifier architectures
     """
 
-    def __init__(self, model):
+    def __init__(self, model, num_class):
         """
         Constructor function for BaseModel
         Args:
@@ -18,6 +18,10 @@ class BaseModel(pl.LightningModule):
         self.epoch_count = -1
         self.model = model
         self.criterion = nn.CrossEntropyLoss()
+
+        self.accuracy = Accuracy()
+        self.precision = Precision(num_class)
+        self.recall = Recall(num_class)
 
     def forward(self, text, seq_len):
         """
@@ -112,7 +116,9 @@ class BaseModel(pl.LightningModule):
 
         _, preds = torch.max(y_hat, 1)
 
-        acc = accuracy(preds, y)
+        acc = self.accuracy(preds, y)
+        pre = self.precision(preds, y)
+        rec = self.recall(preds, y)
 
         print(
             "Training metrics : Loss- {} Accuracy- {} ".format(
