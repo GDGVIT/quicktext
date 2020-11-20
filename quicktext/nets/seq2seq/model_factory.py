@@ -22,26 +22,28 @@ class Seq2SeqAttention(nn.Module):
         )
 
         # Embedding Layer
-        self.embeddings = nn.Embedding(self.config.vocab_size, self.config.embed_size)
+        self.embeddings = nn.Embedding(config.vocab_size, config.embed_size)
 
         # Encoder RNN
         self.lstm = nn.LSTM(
-            input_size=self.config.embed_size,
-            hidden_size=self.config.hidden_size,
-            num_layers=self.config.hidden_layers,
-            bidirectional=self.config.bidirectional,
+            input_size=config.embed_size,
+            hidden_size=config.hidden_size,
+            num_layers=config.hidden_layers,
+            bidirectional=config.bidirectional,
         )
 
         # Dropout Layer
-        self.dropout = nn.Dropout(self.config.dropout_keep)
+        self.dropout = nn.Dropout(config.dropout_keep)
 
         # Fully-Connected Layer
         self.fc = nn.Linear(
-            self.config.hidden_size * (1 + self.config.bidirectional) * 2, n_classes
+            config.hidden_size * (1 + config.bidirectional) * 2, n_classes
         )
 
         # Softmax non-linearity
         self.softmax = nn.Softmax()
+
+        self.config = config
 
     def apply_attention(self, rnn_output, final_hidden_state):
         """

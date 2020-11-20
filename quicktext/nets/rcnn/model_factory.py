@@ -22,30 +22,29 @@ class RCNN(nn.Module):
         )
 
         # Embedding Layer
-        self.embeddings = nn.Embedding(self.config.vocab_size, self.config.embed_size)
+        self.embeddings = nn.Embedding(config.vocab_size, config.embed_size)
 
         # Bi-directional LSTM for RCNN
         self.lstm = nn.LSTM(
-            input_size=self.config.embed_size,
-            hidden_size=self.config.hidden_size,
-            num_layers=self.config.hidden_layers,
-            dropout=self.config.dropout_keep,
+            input_size=config.embed_size,
+            hidden_size=config.hidden_size,
+            num_layers=config.hidden_layers,
+            dropout=config.dropout_keep,
             bidirectional=True,
         )
 
-        self.dropout = nn.Dropout(self.config.dropout_keep)
+        self.dropout = nn.Dropout(config.dropout_keep)
 
         # Linear layer to get "convolution output" to be passed to Pooling Layer
         self.W = nn.Linear(
-            self.config.embed_size + 2 * self.config.hidden_size,
-            self.config.hidden_size_linear,
+            config.embed_size + 2 * config.hidden_size, config.hidden_size_linear,
         )
 
         # Tanh non-linearity
         self.tanh = nn.Tanh()
 
         # Fully-Connected Layer
-        self.fc = nn.Linear(self.config.hidden_size_linear, n_classes)
+        self.fc = nn.Linear(config.hidden_size_linear, n_classes)
 
     def forward(self, x, seq_lens):
         # x.shape = (seq_len, batch_size)
