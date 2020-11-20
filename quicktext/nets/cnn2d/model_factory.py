@@ -38,7 +38,7 @@ class CNN2D(nn.Module):
         self.dropout = nn.Dropout(hparams.dropout)
         self.criterion = nn.CrossEntropyLoss()
 
-    def forward(self, text, seq_len):
+    def forward(self, text, text_lengths):
 
         # text = [batch size, sent len]
 

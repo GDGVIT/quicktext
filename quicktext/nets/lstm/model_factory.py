@@ -35,7 +35,7 @@ class BiLSTM(nn.Module):
 
         self.criterion = nn.CrossEntropyLoss()
 
-    def forward(self, text, seq_lengths):
+    def forward(self, text, text_lengths):
 
         # text = [sent len, batch size]
 
