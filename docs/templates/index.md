@@ -1,18 +1,11 @@
 # QuickText
 
 !!! danger "Important"
-    This project is still in its early stage of development. We have great things planned. Stay Tuned
+    This project is still in its early stage of development. Stay Tuned
 
 Hey there, welcome to QuickText
 
-> QuickText is a text classification framework built using sPacy and PyTorch
-
-> This project is still under development, docs will be updated soon
-
-> All contributions are welcome
-
-> If you want to contribute, open an issue on our [GitHub repo](https://github.com/GDGVIT/quicktext)
-
+QuickText provides Pytorch text classification models and trainers
 
 
 ## Why QuickText?
@@ -25,6 +18,23 @@ QuickText aims to save that time and effort by providing
 - A versatile trainer to train the classifier
 - Several model architectures
 - Close integration with sPacy, use our classifiers in sPacy pipeline
-- Use your own custom PyTorch models with our classifier API
 
+## Example : Training a sentiment classifier
 
+This code is all it takes to train a sentiment classifier.
+
+```
+from quicktext import TextClassifier, Trainer
+from quicktext.datasets import get_imdb
+
+imdb = get_imdb(return_x_y=True)
+
+classifier = TextClassifier(num_class=2)
+
+trainer = Trainer(classifier)
+trainer.fit(imdb.train_data, imdb.val_data, epochs=10, batch_size=64, gpus=1)
+```
+
+<center>
+Made with :heart: by <a href="https://dscvit.com">DSC VIT</a>
+</center>
