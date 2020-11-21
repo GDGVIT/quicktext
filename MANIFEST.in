@@ -3,5 +3,5 @@ include LICENSE
 include README.md
 include settings.ini
 include CODE_OF_CONDUCT.md
-recursive-exclude * __pycache_
-include quicktext/config/*.yml
+recursive-exclude  __pycache__
+global-include *.yml
