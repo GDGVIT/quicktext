@@ -39,3 +39,5 @@ nav:
       - Seq2seq: seq2seq.md
   - API Reference:
       - TextClassifier: text_classifier.md
+      - TextClassifierData: text_classifier_data.md 
+      
