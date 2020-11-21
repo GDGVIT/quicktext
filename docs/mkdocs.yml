@@ -30,7 +30,7 @@ nav:
       - Quickstart: quickstart.md
   - Dataset:
       - IMDB Movie Reviews: imdb_dataset.md
-      - 20 News Groups : 20newsgroups_dataset.md
+      - 20 Newsgroups : 20newsgroups_dataset.md
   - Model:
       - BiLSTM: bilstm.md
       - CNN2D: cnn2d.md
