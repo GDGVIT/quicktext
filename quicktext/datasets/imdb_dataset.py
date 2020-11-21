@@ -117,10 +117,12 @@ def get_imdb(shuffle=True, random_state=42, return_x_y=False):
         or it could return a list of tuples of form (text, label)
     """
 
-    dataset_dir = "qt_dataset"
+    
+    dataset_dir = "quicktext_dataset"
     target_dir = os.path.join(dataset_dir, "aclImdb")
 
-    if not os.path.exists(target_dir):
+    
+    if not os.path.exists(f'{target_dir}.tar.gz'):
         _download_imdb_dataset(dataset_dir)
 
     data = parse_aclimdb_dataset(target_dir)
