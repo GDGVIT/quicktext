@@ -1,6 +1,6 @@
 # Configuration for FastText Model
 
-embed_size: 300
-hidden_size: 10
-lr: 0.5
 vocab_size: 26000
+embedding_dim: 300
+hidden_dim: 10
+lr: 0.5

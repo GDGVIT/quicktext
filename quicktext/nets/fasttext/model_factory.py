@@ -22,13 +22,13 @@ class FastText(nn.Module):
         )
 
         # Embedding Layer
-        self.embeddings = nn.Embedding(config.vocab_size, config.embed_size)
+        self.embeddings = nn.Embedding(config.vocab_size, config.embedding_dim)
 
         # Hidden Layer
-        self.fc1 = nn.Linear(config.embed_size, config.hidden_size)
+        self.fc1 = nn.Linear(config.embedding_dim, config.hidden_dim)
 
         # Output Layer
-        self.fc2 = nn.Linear(config.hidden_size, num_class)
+        self.fc2 = nn.Linear(config.hidden_dim, num_class)
 
     def forward(self, x, text_lengths):
 

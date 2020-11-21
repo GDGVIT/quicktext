@@ -8,7 +8,7 @@ https://github.com/AnubhavGupta3377/Text-Classification-Models-Pytorch
 
 
 class Seq2SeqAttention(nn.Module):
-    def __init__(self, n_classes=2, config=None):
+    def __init__(self, num_class=2, config=None):
         super(Seq2SeqAttention, self).__init__()
 
         main_dir = os.path.dirname(os.path.realpath(__file__))
@@ -22,22 +22,22 @@ class Seq2SeqAttention(nn.Module):
         )
 
         # Embedding Layer
-        self.embeddings = nn.Embedding(config.vocab_size, config.embed_size)
+        self.embeddings = nn.Embedding(config.vocab_size, config.embeddimg_dim)
 
         # Encoder RNN
         self.lstm = nn.LSTM(
-            input_size=config.embed_size,
-            hidden_size=config.hidden_size,
-            num_layers=config.hidden_layers,
+            input_size=config.embedding_dim,
+            hidden_size=config.hidden_dim,
+            num_layers=config.n_layers,
             bidirectional=config.bidirectional,
         )
 
         # Dropout Layer
-        self.dropout = nn.Dropout(config.dropout_keep)
+        self.dropout = nn.Dropout(config.dropout)
 
         # Fully-Connected Layer
         self.fc = nn.Linear(
-            config.hidden_size * (1 + config.bidirectional) * 2, n_classes
+            config.hidden_dim * (1 + config.bidirectional) * 2, num_class
         )
 
         # Softmax non-linearity
@@ -80,10 +80,10 @@ class Seq2SeqAttention(nn.Module):
         # Final hidden state of last layer (num_directions, batch_size, hidden_size)
         batch_size = h_n.shape[1]
         h_n_final_layer = h_n.view(
-            self.config.hidden_layers,
+            self.config.hidden_dim,
             self.config.bidirectional + 1,
             batch_size,
-            self.config.hidden_size,
+            self.config.hidden_dim,
         )[-1, :, :, :]
 
         ##################################### Attention #####################################
