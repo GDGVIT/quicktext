@@ -1,8 +1,10 @@
 # CNN With 2D Filters
 
+## Overview
+
 This is a CNN model for text classification. It uses 2D filters hence the name CNN2D
 
-# Config
+## Config
 
 | Parameters                                        | Explanation                                                      |
 |---------------------------------------------------|------------------------------------------------------------------|

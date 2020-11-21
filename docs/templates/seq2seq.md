@@ -1,8 +1,10 @@
 # Seq2Seq With Attention
 
+## Overview
+
 A sequence to sequence model with attention mechanism for text classification
 
-# Config
+## Config
 
 | Parameters                                     | Explanation                           |
 |------------------------------------------------|---------------------------------------|

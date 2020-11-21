@@ -1,8 +1,10 @@
 # RCNN
 
+## Overview
+
 Recurrent Convolution Neural Network combine both recurrent neural network and convolutional neural network to better capture the semantics of the text
 
-# Config
+## Config
 
 | Parameters                                        | Explanation                           |
 |---------------------------------------------------|---------------------------------------|
