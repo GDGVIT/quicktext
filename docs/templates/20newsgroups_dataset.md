@@ -1,4 +1,4 @@
-# The 20 newsgroups dataset
+# The 20 Newsgroups dataset
 
 This is a dataset for multiclass classification. This dataset consists of 20000 messages from 20 Usenet newsgroups
 
