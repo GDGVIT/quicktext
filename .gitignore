@@ -10,6 +10,13 @@ quicktext/config/__pycache__/
 quicktext/classifier/__pycache__/
 quicktext/engine/__pycache__/
 quicktext/utils/__pycache__/
+quicktext/nets/cnn2d/__pycache__/
+quicktext/nets/lstm/__pycache__/
+quicktext/nets/fasttext/__pycache__/
+quicktext/nets/seq2seq/__pycache__/
+quicktext/nets/rcnn/__pycache__/
+quicktext/nets/lightning_module/__pycache__/
 
 # Lightning logs
 lightning_logs/
+quicktext_data/
