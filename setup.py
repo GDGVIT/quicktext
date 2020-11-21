@@ -51,7 +51,7 @@ def load_requirements(path_dir="./", file_name="requirements.txt", comment_char=
             reqs.append(ln)
 
 
-requirements = load_requirements()
+
 lic = licenses[cfg["license"]]
 min_python = cfg["min_python"]
 
@@ -69,11 +69,12 @@ setuptools.setup(
         for o in py_versions[py_versions.index(min_python) :]
     ],
     url=cfg["git_url"],
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=['tests', 'docs']),
     include_package_data=True,
-    install_requires=requirements,
+    install_requires=load_requirements(),
     dependency_links=cfg.get("dep_links", "").split(),
     python_requires=">=" + cfg["min_python"],
+    setup_requires=[],
     long_description=open("README.md", encoding="utf-8", errors="ignore").read(),
     long_description_content_type="text/markdown",
     zip_safe=False,
