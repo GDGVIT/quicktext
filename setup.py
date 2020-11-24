@@ -29,7 +29,7 @@ PATH_ROOT = os.path.dirname(__file__)
 # import quicktext  # noqa: E402
 
 
-def load_requirements(path_dir=PATH_ROOT, file_name='requirements.txt', comment_char='#'):
+def load_requirements(path_dir=PATH_ROOT, file_name='requirements.txt', comment_char='&'):
     with open(os.path.join(path_dir, file_name), 'r') as file:
         lines = [ln.strip() for ln in file.readlines()]
     reqs = []
