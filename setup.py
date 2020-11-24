@@ -54,6 +54,10 @@ def load_long_description():
     text = text.replace('.svg', '.png')
     return text
 
+extras = {
+    
+}
+
 setup(
     name='quicktext',
     version=quicktext.__version__,
