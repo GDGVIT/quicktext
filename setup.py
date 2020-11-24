@@ -12,6 +12,7 @@
 
 import os
 from io import open
+from configparser import ConfigParser
 
 # Always prefer setuptools over distutils
 from setuptools import find_packages, setup
@@ -25,7 +26,7 @@ except ImportError:
 # http://blog.ionelmc.ro/2014/05/25/python-packaging/
 PATH_ROOT = os.path.dirname(__file__)
 
-import quicktext  # noqa: E402
+# import quicktext  # noqa: E402
 
 
 def load_requirements(path_dir=PATH_ROOT, file_name='requirements.txt', comment_char='#'):
@@ -46,7 +47,7 @@ def load_requirements(path_dir=PATH_ROOT, file_name='requirements.txt', comment_
 
 def load_long_description():
     # https://github.com/PyTorchLightning/pytorch-lightning/raw/master/docs/source/_images/lightning_module/pt_to_pl.png
-    url = os.path.join(quicktext.__homepage__, 'raw', quicktext.__version__, 'docs')
+    url = os.path.join(cfg['git_url'] ,'raw', cfg['version'] ,'docs')
     text = open('README.md', encoding='utf-8').read()
     # replace relative repository path to absolute link to the release
     text = text.replace('](docs', f']({url}')
@@ -54,19 +55,23 @@ def load_long_description():
     text = text.replace('.svg', '.png')
     return text
 
+config = ConfigParser(delimiters=["="])
+config.read("settings.ini")
+cfg = config["DEFAULT"]
+
 extras = {
-    
+
 }
 
 setup(
     name='quicktext',
-    version=quicktext.__version__,
-    description=quicktext.__docs__,
-    author=quicktext.__author__,
-    author_email=quicktext.__author_email__,
-    url=quicktext.__homepage__,
+    version=cfg['version'],
+    description=cfg['docs'],
+    author=cfg['author'],
+    author_email=cfg['author_email'],
+    url=cfg['git_url'],
     download_url='https://github.com/GDGVIT/quicktext',
-    license=quicktext.__license__,
+    license=cfg['license'],
     packages=find_packages(exclude=['tests', 'tests/*', 'benchmarks']),
 
     long_description=load_long_description(),
