@@ -38,8 +38,8 @@ def load_requirements(path_dir=PATH_ROOT, file_name='requirements.txt', comment_
         if comment_char in ln:
             ln = ln[:ln.index(comment_char)].strip()
         # skip directly installed dependencies
-        if ln.startswith('http'):
-            continue
+        # if ln.startswith('http'):
+        #     continue
         if ln:  # if requirement is not empty
             reqs.append(ln)
     return reqs
