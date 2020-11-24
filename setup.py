@@ -29,7 +29,7 @@ PATH_ROOT = os.path.dirname(__file__)
 # import quicktext  # noqa: E402
 
 
-def load_requirements(path_dir=PATH_ROOT, file_name='requirements.txt', comment_char='&'):
+def load_requirements(path_dir=PATH_ROOT, file_name='requirements.txt', comment_char='#'):
     with open(os.path.join(path_dir, file_name), 'r') as file:
         lines = [ln.strip() for ln in file.readlines()]
     reqs = []
@@ -38,10 +38,12 @@ def load_requirements(path_dir=PATH_ROOT, file_name='requirements.txt', comment_
         if comment_char in ln:
             ln = ln[:ln.index(comment_char)].strip()
         # skip directly installed dependencies
-        # if ln.startswith('http'):
-        #     continue
+        if ln.startswith('http'):
+            continue
         if ln:  # if requirement is not empty
             reqs.append(ln)
+
+
     return reqs
 
 
@@ -84,7 +86,6 @@ setup(
     setup_requires=[],
     install_requires=load_requirements(),
     extras_require=extras,
-
     project_urls={
         "Bug Tracker": "https://github.com/GDGVIT/quicktext/issues",
         "Documentation": "https://pytorch-lightning.rtfd.io/en/latest/",
