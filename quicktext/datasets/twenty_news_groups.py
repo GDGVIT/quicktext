@@ -87,10 +87,7 @@ def strip_newsgroup_footer(text):
 
 
 def get_20newsgroups(
-    shuffle=True,
-    random_state=42,
-    remove=[],
-    dataset_dir="quicktext_dataset",
+    shuffle=True, random_state=42, remove=[], dataset_dir="quicktext_dataset",
 ):
     """
     Loads the files from 20 news groups dataset 
@@ -143,7 +140,6 @@ def get_20newsgroups(
             "test": {"data": test_data, "target": test_target},
         }
     )
-
 
     train = convert_to_x_y(train_data, train_target)
     val = convert_to_x_y(val_data, val_target)

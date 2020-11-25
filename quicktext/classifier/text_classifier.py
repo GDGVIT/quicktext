@@ -90,16 +90,12 @@ class TextClassifier:
         tokens = torch.tensor(tokens)
         tokens = tokens.unsqueeze(0)
         text_length = torch.tensor([tokens.shape[1]])
-        
+
         logits = self.model(tokens, text_length)
         prob = softmax(logits.data)
         label = torch.argmax(prob.data)
 
-        output = {
-            'logits':logits.data,
-            'prob':prob.data,
-            'label':label
-        }
+        output = {"logits": logits.data, "prob": prob.data, "label": label}
 
         return output
 

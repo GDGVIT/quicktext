@@ -122,9 +122,7 @@ class BaseModel(pl.LightningModule):
 
         print("\nTraining metrics:")
         print(
-            "Loss: {:.3f} Accuracy: {:.3f} ".format(
-                avg_loss.item(), acc.item() * 100
-            )
+            "Loss: {:.3f} Accuracy: {:.3f} ".format(avg_loss.item(), acc.item() * 100)
         )
 
         print("Precision: {:.3f} Recall: {:.3f}".format(pre.item(), rec.item()))
