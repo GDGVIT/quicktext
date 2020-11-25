@@ -6,7 +6,7 @@ This class is a torch Dataset (torch.utils.Dataset)
 
 ## Methods
 
-### TextClassifierData.\__init__
+TextClassifierData.\__init__
 
 
 | Name  | Type        | Description                          |

@@ -11,7 +11,10 @@ theme:
 docs_dir: templates
 repo_url: https://github.com/picturate/qtc
 markdown_extensions:
+  - admonition
   - codehilite
+  - def_list
+  - footnotes
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -20,13 +23,14 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-  - admonition
+  
 extra_javascript:
   - https://unpkg.com/mermaid@8.4.4/dist/mermaid.min.js
 
 nav:
   - Home: index.md
   - Getting Started:
+      - Installation: getting_started/installation.md
       - Quickstart: getting_started/quickstart.md
   - Dataset:
       - IMDB Movie Reviews: dataset/imdb_dataset.md
@@ -37,7 +41,3 @@ nav:
       - FastText: models/fasttext.md
       - RCNN: models/rcnn.md
       - Seq2seq: models/seq2seq.md
-  - API Reference:
-      - TextClassifier: reference/text_classifier.md
-      - TextClassifierData: reference/text_classifier_data.md 
-      
