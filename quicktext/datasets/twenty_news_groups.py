@@ -107,15 +107,18 @@ def get_20newsgroups(
     """
 
     target_file = "20_newsgroups"
-    tar_dir = os.path.join(dataset_dir, f'{target_file}.tar.gz')
-    if not os.path.exists(tar_dir):
-        _download_20newsgroups(dataset_dir)
+    tar_file = os.path.join(dataset_dir, f"{target_file}.tar.gz")
 
-    tar_file = tarfile.open(tar_dir)
+    extracted_dir = os.path.join(dataset_dir, target_file)
+
+    if not os.path.exists(tar_file):
+        _download_20newsgroups(dataset_dir, target_file)
+
+    tar_file = tarfile.open(tar_file)
     tar_file.extractall(dataset_dir)
     tar_file.close()
 
-    data = load_from_directory(target_dir)
+    data = load_from_directory(extracted_dir)
 
     data.data = [text.decode("latin-1") for text in data.data]
 

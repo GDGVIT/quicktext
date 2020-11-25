@@ -97,7 +97,7 @@ def bulk_read_files(target_dir):
     return data
 
 
-def get_imdb(shuffle=True, random_state=42, return_x_y=False):
+def get_imdb(shuffle=True, random_state=42, return_x_y=False, dataset_dir='quicktext_dataset'):
     """
     Loads aclImdb dataset 
     This dataset has 25,000 samples in training and validation 
@@ -112,22 +112,21 @@ def get_imdb(shuffle=True, random_state=42, return_x_y=False):
         or it could return a list of tuples of form (text, label)
     """
 
-    
-    dataset_dir = "quicktext_dataset"
     target_file = "aclImdb"
-    tar_dir = os.path.join(dataset_dir, f"{target_file}.tar.gz")
+    tar_file = os.path.join(dataset_dir, f"{target_file}.tar.gz")
 
+    extracted_dir = os.path.join(dataset_dir, target_file)
 
-    if not os.path.exists(f'{target_dir}.tar.gz'):
+    if not os.path.exists(tar_file):
         _download_imdb_dataset(dataset_dir, target_file)
 
 
     # Extract tar file
-    tar_file = tarfile.open(tar_dir)
+    tar_file = tarfile.open(tar_file)
     tar_file.extractall(dataset_dir)
     tar_file.close()
 
-    data = parse_aclimdb_dataset(target_dir)
+    data = parse_aclimdb_dataset(extracted_dir)
 
     train_data, val_data, train_target, val_target = train_test_split(
         data.train.data, data.train.target, test_size=0.2, random_state=random_state
