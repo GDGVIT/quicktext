@@ -97,7 +97,7 @@ def bulk_read_files(target_dir):
     return data
 
 
-def get_imdb(shuffle=True, random_state=42, return_x_y=False, dataset_dir='quicktext_dataset'):
+def get_imdb(shuffle=True, random_state=42, dataset_dir='quicktext_dataset'):
     """
     Loads aclImdb dataset 
     This dataset has 25,000 samples in training and validation 
@@ -132,25 +132,16 @@ def get_imdb(shuffle=True, random_state=42, return_x_y=False, dataset_dir='quick
         data.train.data, data.train.target, test_size=0.2, random_state=random_state
     )
 
+    train = convert_to_x_y(train_data, train_target)
+    val = convert_to_x_y(val_data, val_target)
+    test = convert_to_x_y(data.test.data, data.test.target)
+
     data = EasyDict(
         {
-            "train": {"data": train_data, "target": train_target},
-            "val": {"data": val_data, "target": val_target},
-            "test": {"data": data.test.data, "target": data.test.target},
+            "train": train,
+            "val": val,
+            "test": test,
         }
     )
-
-    if return_x_y:
-        train_data = convert_to_x_y(data.train)
-        val_data = convert_to_x_y(data.val)
-        test_data = convert_to_x_y(data.test)
-
-        data = EasyDict(
-            {
-                "train": {"data": train_data},
-                "val": {"data": val_data},
-                "test": {"data": test_data},
-            }
-        )
 
     return data

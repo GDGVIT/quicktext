@@ -90,7 +90,6 @@ def get_20newsgroups(
     shuffle=True,
     random_state=42,
     remove=[],
-    return_x_y=False,
     dataset_dir="quicktext_dataset",
 ):
     """
@@ -145,12 +144,11 @@ def get_20newsgroups(
         }
     )
 
-    if return_x_y:
 
-        train_data = convert_to_x_y(data.train)
-        val_data = convert_to_x_y(data.val)
-        test_data = convert_to_x_y(data.test)
+    train = convert_to_x_y(train_data, train_target)
+    val = convert_to_x_y(val_data, val_target)
+    test = convert_to_x_y(test_data, test_target)
 
-        data = EasyDict({"train": train_data, "val": val_data, "test": test_data})
+    data = EasyDict({"train": train, "val": val, "test": test})
 
     return data

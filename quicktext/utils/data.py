@@ -35,14 +35,15 @@ def load_from_directory(directory):
     return payload
 
 
-def convert_to_x_y(data):
+def convert_to_x_y(texts, targets):
     """
     Converts data into form x,y 
     Args:
-        data (dict): With keys data, target 
+        texts (list): List of texts
+        targets (list): List of targets
     Returns:
         list: A tuple of form (x,y)
     """
 
-    data = [(data.data[idx], data.target[idx]) for idx in range(len(data.target))]
+    data = [(texts[idx], targets[idx]) for idx in range(len(targets))]
     return data
