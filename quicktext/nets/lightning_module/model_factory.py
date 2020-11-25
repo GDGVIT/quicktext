@@ -23,12 +23,12 @@ class BaseModel(pl.LightningModule):
         self.precision_score = Precision(num_class)
         self.recall_score = Recall(num_class)
 
-    def forward(self, text, seq_len):
+    def forward(self, text, text_lengths):
         """
         Forward function to define model architecture
         """
 
-        return self.model(text, seq_len)
+        return self.model(text, text_lengths)
 
     def training_step(self, batch, batch_idx):
         """
@@ -120,14 +120,14 @@ class BaseModel(pl.LightningModule):
         pre = self.precision_score(preds, y)
         rec = self.recall_score(preds, y)
 
-        print("Training metrics : ")
+        print("\nTraining metrics:")
         print(
-            "Loss- {} Accuracy- {} ".format(
+            "Loss: {:.3f} Accuracy: {:.3f} ".format(
                 avg_loss.item(), acc.item() * 100
             )
         )
 
-        print("Precision- {} Recall- {}".format(pre.item(), rec.item()))
+        print("Precision: {:.3f} Recall: {:.3f}".format(pre.item(), rec.item()))
 
         return None
 
@@ -152,14 +152,14 @@ class BaseModel(pl.LightningModule):
         if self.epoch_count > -1:
             print("-" * 50)
             print("Epoch {} statistics".format(self.epoch_count))
-            print("Validation metrics : ")
+            print("\nValidation metrics : ")
             print(
-                "Loss- {} Accuracy- {} ".format(
+                "Loss: {:.3f} Accuracy: {:.3f} ".format(
                     avg_loss.item(), acc.item() * 100
                 )
             )
 
-            print("Precision- {} Recall- {}".format(pre.item(), rec.item()))
+            print("Precision: {:.3f} Recall: {:.3f}".format(pre.item(), rec.item()))
 
         else:
             print("Validation sanity fit complete")
