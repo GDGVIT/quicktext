@@ -4,42 +4,72 @@
 	<img src="https://user-images.githubusercontent.com/30529572/72455010-fb38d400-37e7-11ea-9c1e-8cdeb5f5906e.png" alt="DSC VIT Logo"/>
 </a>
 	<h2 align="center"> QuickText </h2>
-	<h4 align="center"> Quick and simple text classification framework <h4>
+	<h4 align="center">Toolkit For Text Classification <h4>
 </p>
+
+<p align="center">
+  <a href="#about">About</a> •
+  <a href="#features">Features</a> •
+  <a href="#installation">Install</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#examples">Examples</a>
+  <br> <br>
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![DOCS](https://img.shields.io/badge/Docs-latest-green.svg)](https://picturate.github.io/quickTextCassifier/) 
 
 
-* * * * *
->**Note: This project is still work in progress**
-    All contributions are welcome
-    Feel free to request any feature or report bugs by creating an issue for it
+![CI Tests](https://github.com/GDGVIT/quicktext/workflows/CI%20Tests/badge.svg)
+[![codecov](https://codecov.io/gh/picturate/qtc/branch/master/graph/badge.svg)](https://codecov.io/gh/GDGVIT/quicktext)
 
-![CI Tests](https://github.com/picturate/qtc/workflows/CI%20Tests/badge.svg)
-![Check Formatting](https://github.com/picturate/qtc/workflows/Check%20Formatting/badge.svg)
-![Build mkdocs](https://github.com/picturate/qtc/workflows/Build%20mkdocs/badge.svg)
-![Deploy mkdocs](https://github.com/picturate/qtc/workflows/Deploy%20mkdocs/badge.svg)
-![PyPi Release](https://github.com/picturate/qtc/workflows/PyPi%20Release/badge.svg)
-![Install Package](https://github.com/picturate/qtc/workflows/Install%20Package/badge.svg)
-[![codecov](https://codecov.io/gh/picturate/qtc/branch/master/graph/badge.svg)](https://codecov.io/gh/picturate/qtc)
-* * * * *
+# About
 
-<img src="images/demo.png" alt="demo">
+Quicktext is a framework for developing LSTM and CNN based text classification models.
+
+# Features
+
+- It is __easy__ to learn and use quicktext
+- The classifiers can be added to __sPacy__ pipeline
+- It's built using __PyTorch__, hence has inbuilt __quantization__ and __onnx__ support
+
+# Install
+
+Install from source
+
+```
+pip install -q git+https://github.com/GDGVIT/quicktext.git
+```
+
+# Getting Started
+
+```python
+from quicktext import TextClassifier
+from quicktext import Trainer
+from quicktext.datasets import get_imdb
+
+imdb = get_imdb()
+
+classifier = TextClassifier(num_class=2, arch='bilstm')
+
+trainer = Trainer(classifier)
+trainer.fit(imdb.train, imdb.val, epochs=10, batch_size=64, gpus=1)
+```
+
+# Supported Models
 
 
-## Available Models
-
-| Model Class | Name | Docs |
-|:-----------:|:---------------------------------------------:|:-------------:|
-| BiLSTM | Bidirectional LSTM  | [Click here]() |
-| CNN2D| 2D Convolutional Net  | [Click here]() |
-
-> We are currently adding more models to this framework
+- Bidirectional LSTM
+- CNN 2D filters     
+- Fasttext           
+- RCNN               
+- Seq2Seq Attention  
 
 
+# Examples
 
-## Contributors
+- [Spam or ham, spam classification]()
+
+# Contributors
 
 <table>
 <tr align="center">
