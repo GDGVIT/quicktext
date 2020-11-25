@@ -97,7 +97,7 @@ def get_20newsgroups(
     random_state=42,
     remove=[],
     return_x_y=False,
-    dataset_dir="quicktext_data",
+    dataset_dir="quicktext_dataset",
 ):
     """
     Loads the files from 20 news groups dataset 

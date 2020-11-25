@@ -15,7 +15,7 @@ def _download_imdb_dataset(dataset_dir):
         None
     """
 
-    target_dir = "imdb"
+    target_dir = "aclImdb"
 
     if not os.path.exists(dataset_dir):
         os.mkdir(dataset_dir)
@@ -121,10 +121,11 @@ def get_imdb(shuffle=True, random_state=42, return_x_y=False):
     dataset_dir = "quicktext_dataset"
     target_dir = os.path.join(dataset_dir, "aclImdb")
 
-    
+    print(f'{target_dir}.tar.gz')
     if not os.path.exists(f'{target_dir}.tar.gz'):
+        print("Need to download")
         _download_imdb_dataset(dataset_dir)
-
+    print("Downloaded")
     data = parse_aclimdb_dataset(target_dir)
 
     train_data, val_data, train_target, val_target = train_test_split(
