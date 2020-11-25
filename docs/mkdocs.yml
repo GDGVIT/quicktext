@@ -9,12 +9,13 @@ theme:
     # scheme: default Use this for light mode
 
 docs_dir: templates
-repo_url: https://github.com/picturate/qtc
+repo_url: https://github.com/GDGVIT/quicktext
 markdown_extensions:
   - admonition
   - codehilite
   - def_list
   - footnotes
+  - pymdownx.tabbed
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -36,6 +37,7 @@ nav:
       - IMDB Movie Reviews: dataset/imdb_dataset.md
       - 20 Newsgroups : dataset/20newsgroups_dataset.md
   - Model:
+      - Introduction: models/introduction.md
       - BiLSTM: models/bilstm.md
       - CNN2D: models/cnn2d.md
       - FastText: models/fasttext.md
