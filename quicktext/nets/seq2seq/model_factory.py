@@ -22,7 +22,7 @@ class Seq2SeqAttention(nn.Module):
         )
 
         # Embedding Layer
-        self.embeddings = nn.Embedding(config.vocab_size, config.embeddimg_dim)
+        self.embeddings = nn.Embedding(config.vocab_size, config.embedding_dim)
 
         # Encoder RNN
         self.lstm = nn.LSTM(
@@ -66,7 +66,7 @@ class Seq2SeqAttention(nn.Module):
         ).squeeze(2)
         return attention_output
 
-    def forward(self, x, seq_len):
+    def forward(self, x, text_length):
         # x.shape = (max_sen_len, batch_size)
         x = x.permute(1, 0)
 

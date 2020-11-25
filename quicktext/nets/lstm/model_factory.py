@@ -50,7 +50,7 @@ class BiLSTM(nn.Module):
 
         # pack sequence
         packed_embedded = nn.utils.rnn.pack_padded_sequence(
-            embedded, seq_lengths, batch_first=True
+            embedded, text_lengths, batch_first=True
         )
 
         packed_output, (hidden, cell) = self.rnn(packed_embedded)

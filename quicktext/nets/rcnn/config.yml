@@ -3,7 +3,7 @@
 embedding_dim: 300
 n_layers: 1
 hidden_dim: 64
-hidden_size_linear: 64
+hidden_dim_linear: 64
 dropout: 0.8
 lr: 0.5
 vocab_size: 26000
