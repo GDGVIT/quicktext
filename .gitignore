@@ -17,6 +17,8 @@ quicktext/nets/seq2seq/__pycache__/
 quicktext/nets/rcnn/__pycache__/
 quicktext/nets/lightning_module/__pycache__/
 
+# Dataset
+quicktext_dataset/
+
 # Lightning logs
 lightning_logs/
-quicktext_data/
