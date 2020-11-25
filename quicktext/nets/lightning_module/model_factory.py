@@ -120,11 +120,14 @@ class BaseModel(pl.LightningModule):
         pre = self.precision_score(preds, y)
         rec = self.recall_score(preds, y)
 
+        print("Training metrics : ")
         print(
-            "Training metrics : Loss- {} Accuracy- {} ".format(
+            "Loss- {} Accuracy- {} ".format(
                 avg_loss.item(), acc.item() * 100
             )
         )
+
+        print("Precision- {} Recall- {}".format(pre.item(), rec.item()))
 
         return None
 
@@ -149,11 +152,14 @@ class BaseModel(pl.LightningModule):
         if self.epoch_count > -1:
             print("-" * 50)
             print("Epoch {} statistics".format(self.epoch_count))
+            print("Validation metrics : ")
             print(
-                "Validation metrics : Loss- {} Accuracy- {} ".format(
+                "Loss- {} Accuracy- {} ".format(
                     avg_loss.item(), acc.item() * 100
                 )
             )
+
+            print("Precision- {} Recall- {}".format(pre.item(), rec.item()))
 
         else:
             print("Validation sanity fit complete")
