@@ -1,5 +1,4 @@
 from quicktext.imports import *
-from quicktext.nets.base import BaseModel
 from quicktext.utils.configuration import read_yaml, merge_dictb_to_dicta
 
 """
