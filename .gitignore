@@ -19,6 +19,7 @@ quicktext/nets/lightning_module/__pycache__/
 
 # Dataset
 quicktext_dataset/
+quicktext_data/
 
 # Lightning logs
 lightning_logs/
