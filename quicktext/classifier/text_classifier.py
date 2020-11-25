@@ -1,4 +1,5 @@
 import en_core_web_md
+from torch.nn.functional import softmax
 
 from quicktext.imports import *
 from quicktext.nets.cnn2d.model_factory import CNN2D
@@ -89,8 +90,17 @@ class TextClassifier:
         tokens = torch.tensor(tokens)
         tokens = tokens.unsqueeze(0)
         text_length = torch.tensor([tokens.shape[1]])
-        print(text_length)
-        output = self.model(tokens, text_length)
+        
+        logits = self.model(tokens, text_length)
+        prob = softmax(logits.data)
+        label = torch.argmax(prob.data)
+
+        output = {
+            'logits':logits.data,
+            'prob':prob.data,
+            'label':label
+        }
+
         return output
 
     @property
