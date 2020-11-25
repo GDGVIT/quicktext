@@ -14,7 +14,7 @@ class TextClassifierTester(unittest.TestCase):
 
         text = "Sample text to test the classifier"
         output = classifier.predict(text)
-        self.assertTrue(isinstance(output.data, torch.Tensor))
+        self.assertIsInstance(output,dict)
 
     def test_get_ids(self):
         classifier = TextClassifier(num_class=2)
