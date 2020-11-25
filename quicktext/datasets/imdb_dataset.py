@@ -6,28 +6,23 @@ from quicktext.imports import *
 from quicktext.utils.data import load_from_directory, convert_to_x_y
 
 
-def _download_imdb_dataset(dataset_dir):
+def _download_imdb_dataset(dataset_dir, target_name):
     """
     Downloads IMDB dataset to target dir
     Args:
         dataset_dir (str): The folder where data will be stored
+        target_name (str): The name of the downloaded file (without extension)
     Returns:
         None
     """
-
-    target_dir = "aclImdb"
 
     if not os.path.exists(dataset_dir):
         os.mkdir(dataset_dir)
 
     download_url = "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
 
-    tar_dir = os.path.join(dataset_dir, f"{target_dir}.tar.gz")
+    tar_dir = os.path.join(dataset_dir, f"{target_name}.tar.gz")
     urllib.request.urlretrieve(download_url, tar_dir)
-
-    tar_file = tarfile.open(tar_dir)
-    tar_file.extractall(dataset_dir)
-    tar_file.close()
 
 
 def parse_aclimdb_dataset(target_dir):
@@ -119,13 +114,19 @@ def get_imdb(shuffle=True, random_state=42, return_x_y=False):
 
     
     dataset_dir = "quicktext_dataset"
-    target_dir = os.path.join(dataset_dir, "aclImdb")
+    target_file = "aclImdb"
+    tar_dir = os.path.join(dataset_dir, f"{target_file}.tar.gz")
 
-    print(f'{target_dir}.tar.gz')
+
     if not os.path.exists(f'{target_dir}.tar.gz'):
-        print("Need to download")
-        _download_imdb_dataset(dataset_dir)
-    print("Downloaded")
+        _download_imdb_dataset(dataset_dir, target_file)
+
+
+    # Extract tar file
+    tar_file = tarfile.open(tar_dir)
+    tar_file.extractall(dataset_dir)
+    tar_file.close()
+
     data = parse_aclimdb_dataset(target_dir)
 
     train_data, val_data, train_target, val_target = train_test_split(
