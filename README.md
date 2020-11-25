@@ -17,8 +17,6 @@
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![DOCS](https://img.shields.io/badge/Docs-latest-green.svg)](https://picturate.github.io/quickTextCassifier/) 
-
-
 ![CI Tests](https://github.com/GDGVIT/quicktext/workflows/CI%20Tests/badge.svg)
 [![codecov](https://codecov.io/gh/picturate/qtc/branch/master/graph/badge.svg)](https://codecov.io/gh/GDGVIT/quicktext)
 
@@ -32,7 +30,7 @@ Quicktext is a framework for developing LSTM and CNN based text classification m
 - The classifiers can be added to __sPacy__ pipeline
 - It's built using __PyTorch__, hence has inbuilt __quantization__ and __onnx__ support
 
-# Install
+# Installation
 
 Install from source
 
