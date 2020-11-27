@@ -1,5 +1,6 @@
 from quicktext.imports import *
 from quicktext.data.classifier_data import TextClassifierData
+from quicktext.nets.lightning_module.model_factory import BaseModel
 
 
 class Trainer:
@@ -18,8 +19,8 @@ class Trainer:
         Returns:   
             None
         """
-
         self.classifier = classifier
+        self.pl_model = BaseModel(classifier.model, classifier.num_class)
 
     def load_data(self, data, batch_size):
         """
@@ -32,12 +33,10 @@ class Trainer:
         """
 
         dataset = TextClassifierData(self.classifier.vocab, data)
-        loader = DataLoader(
-            dataset, batch_size=batch_size, collate_fn=dataset.get_batch
-        )
+        loader = DataLoader(dataset, batch_size=batch_size, collate_fn=dataset.collator)
         return loader
 
-    def fit(self, train, val, epochs=1, batch_size=32, gpu=False):
+    def fit(self, train_data, val_data, epochs=1, batch_size=32, gpus=0):
         """
         This function trains the model
         Args:
@@ -47,18 +46,13 @@ class Trainer:
             None
         """
 
-        train_loader = self.load_data(train, batch_size)
-        val_loader = self.load_data(val, batch_size)
+        train_loader = self.load_data(train_data, batch_size)
+        val_loader = self.load_data(val_data, batch_size)
 
-        if gpu is False:
-            ngpus = 0
-        else:
-            ngpus = 1
+        trainer = pl.Trainer(max_epochs=epochs, gpus=gpus)
+        trainer.fit(self.pl_model, train_loader, val_loader)
 
-        trainer = pl.Trainer(max_epochs=epochs, gpus=ngpus)
-        trainer.fit(self.classifier.model, train_loader, val_loader)
-
-    def test(self, test, batch_size=32, gpu=False, ngpus=0):
+    def test(self, test_data, batch_size=32, gpus=0):
         """
         This function tests model using test set
         Args:
@@ -67,12 +61,7 @@ class Trainer:
             None
         """
 
-        if gpu is False:
-            ngpus = 0
-        else:
-            ngpus = ngpus
+        test_loader = self.load_data(test_data, batch_size)
 
-        test_loader = self.load_data(test, batch_size)
-
-        trainer = pl.Trainer(gpus=ngpus)
+        trainer = pl.Trainer(gpus=gpus)
         trainer.test(self.classifier.model, test_dataloaders=test_loader)

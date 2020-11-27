@@ -13,28 +13,22 @@ from quicktext.imports import *
 from quicktext.utils.data import load_from_directory, convert_to_x_y
 
 
-def _download_20newsgroups(dataset_dir):
+def _download_20newsgroups(dataset_dir, target_file):
     """
     Downloads the 20newsgroups data to target dir
     Args:
-        target_dir (str): Folder where dataset will be stored
+        dataset_dir (str): Folder where dataset will be stored
+        target_name (str): The name of the downloaded file (without extension)
     Returns:
         None 
     """
-
-    target_dir = "20_newsgroups"
-
     if not os.path.exists(dataset_dir):
         os.mkdir(dataset_dir)
 
     download_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/20newsgroups-mld/20_newsgroups.tar.gz"
 
-    tar_dir = os.path.join(dataset_dir, f"{target_dir}.tar.gz")
+    tar_dir = os.path.join(dataset_dir, f"{target_file}.tar.gz")
     urllib.request.urlretrieve(download_url, tar_dir)
-
-    tar_file = tarfile.open(tar_dir)
-    tar_file.extractall(dataset_dir)
-    tar_file.close()
 
 
 def strip_newsgroup_header(text):
@@ -93,11 +87,7 @@ def strip_newsgroup_footer(text):
 
 
 def get_20newsgroups(
-    shuffle=True,
-    random_state=42,
-    remove=[],
-    return_x_y=False,
-    dataset_dir="quicktext_data",
+    shuffle=True, random_state=42, remove=[], dataset_dir="quicktext_dataset",
 ):
     """
     Loads the files from 20 news groups dataset 
@@ -112,11 +102,19 @@ def get_20newsgroups(
         or it could return a list of tuples of form (text, label)
     """
 
-    target_dir = os.path.join(dataset_dir, "20_newsgroups")
+    target_file = "20_newsgroups"
+    tar_file = os.path.join(dataset_dir, f"{target_file}.tar.gz")
 
-    _download_20newsgroups(dataset_dir)
+    extracted_dir = os.path.join(dataset_dir, target_file)
 
-    data = load_from_directory(target_dir)
+    if not os.path.exists(tar_file):
+        _download_20newsgroups(dataset_dir, target_file)
+
+    tar_file = tarfile.open(tar_file)
+    tar_file.extractall(dataset_dir)
+    tar_file.close()
+
+    data = load_from_directory(extracted_dir)
 
     data.data = [text.decode("latin-1") for text in data.data]
 
@@ -143,12 +141,10 @@ def get_20newsgroups(
         }
     )
 
-    if return_x_y:
+    train = convert_to_x_y(train_data, train_target)
+    val = convert_to_x_y(val_data, val_target)
+    test = convert_to_x_y(test_data, test_target)
 
-        train_data = convert_to_x_y(data.train)
-        val_data = convert_to_x_y(data.val)
-        test_data = convert_to_x_y(data.test)
-
-        data = EasyDict({"train": train_data, "val": val_data, "test": test_data})
+    data = EasyDict({"train": train, "val": val, "test": test})
 
     return data

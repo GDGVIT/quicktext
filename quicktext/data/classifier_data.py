@@ -53,7 +53,7 @@ class TextClassifierData(Dataset):
 
         return {"ids": ids, "label": label}
 
-    def get_batch(self, batch):
+    def collator(self, batch):
         """
         Collate function for PyTorch dataloaders
         This function is required to pad the sequences in batch

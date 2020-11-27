@@ -1,9 +1,13 @@
 import en_core_web_md
+from torch.nn.functional import softmax
 
 from quicktext.imports import *
-from quicktext.nets.cnn2d import CNN2D
-from quicktext.nets.bi_lstm import BiLSTM
-from quicktext.nets.base import BaseModel
+from quicktext.nets.cnn2d.model_factory import CNN2D
+from quicktext.nets.lstm.model_factory import BiLSTM
+from quicktext.nets.fasttext.model_factory import FastText
+from quicktext.nets.rcnn.model_factory import RCNN
+from quicktext.nets.seq2seq.model_factory import Seq2SeqAttention
+from quicktext.nets.lightning_module.model_factory import BaseModel
 
 
 class TextClassifier:
@@ -11,16 +15,18 @@ class TextClassifier:
     This class contains the models and vocab
     """
 
-    def __init__(self, n_classes, arch="cnn", vocab=None, hparams={}):
+    def __init__(self, num_class, arch="cnn2d", vocab=None, config={}):
         """
         Constructor class for TextClassifier
         Args:
             vocab (spacy.vocab): Spacy vocabulary class
             arch (string/pl.Lightningmodule): The underlying text classifier model architecture
-            hparams (dict): Dictionary of hyper parameters for the underlying model
+            config (dict): Dictionary of hyper parameters for the underlying model
         Returns:
             None
         """
+
+        self._num_class = num_class
 
         if isinstance(vocab, Vocab):
             self._vocab = vocab
@@ -36,25 +42,34 @@ class TextClassifier:
         self.tokenizer = Tokenizer(self.vocab)
 
         input_dim, embedding_dim = self.vocab.vectors.shape
-        output_dim = n_classes
+        output_dim = num_class
         pad_idx = self.vocab.vectors.key2row[self.vocab["@pad@"].orth]
 
-        hparams["pad_idx"] = pad_idx
-        hparams["input_dim"] = input_dim
-        hparams["embedding_dim"] = embedding_dim
+        config["pad_idx"] = pad_idx
+        config["input_dim"] = input_dim
+        config["embedding_dim"] = embedding_dim
 
         if isinstance(arch, BaseModel):
             self._model = arch
 
         elif isinstance(arch, str):
 
-            if arch == "cnn":
+            if arch == "cnn2d":
 
-                self._model = CNN2D(output_dim, hparams)
+                self._model = CNN2D(output_dim, config)
+
+            elif arch == "fasttext":
+                self._model = FastText(output_dim, config)
+
+            elif arch == "seq2seq":
+                self._model = Seq2SeqAttention(output_dim, config)
+
+            elif arch == "rcnn":
+                self._model = RCNN(output_dim, config)
 
             elif arch == "bilstm":
 
-                self._model = BiLSTM(output_dim, hparams)
+                self._model = BiLSTM(output_dim, config)
 
             else:
                 print("No such architecture exists")
@@ -75,8 +90,13 @@ class TextClassifier:
         tokens = torch.tensor(tokens)
         tokens = tokens.unsqueeze(0)
         text_length = torch.tensor([tokens.shape[1]])
-        print(text_length)
-        output = self.model(tokens, text_length)
+
+        logits = self.model(tokens, text_length)
+        prob = softmax(logits.data)
+        label = torch.argmax(prob.data)
+
+        output = {"logits": logits.data, "prob": prob.data, "label": label}
+
         return output
 
     @property
@@ -86,6 +106,10 @@ class TextClassifier:
     @property
     def model(self):
         return self._model
+
+    @property
+    def num_class(self):
+        return self._num_class
 
     def get_ids(self, text):
         """

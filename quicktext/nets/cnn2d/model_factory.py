@@ -1,5 +1,4 @@
 from quicktext.imports import *
-from quicktext.nets.base import BaseModel
 from quicktext.utils.configuration import read_yaml, merge_dictb_to_dicta
 
 """
@@ -7,41 +6,43 @@ Code for the neural net based on a repo by bentrevett
 https://github.com/bentrevett/pytorch-sentiment-analysis
 """
 
-__all__ = ["CNN2D"]
 
+class CNN2D(nn.Module):
+    def __init__(self, output_dim, config=None):
 
-class CNN2D(BaseModel):
-    def __init__(self, output_dim, hparams):
+        super().__init__()
 
-        super(CNN2D, self).__init__()
+        main_dir = os.path.dirname(os.path.realpath(__file__))
+        config_path = os.path.join(main_dir, "config.yml")
+        default_config = read_yaml(config_path)
 
-        main_dir = Path(os.path.dirname(os.path.realpath(__file__))).parent
-        config_path = os.path.join(main_dir, "config/cnn2d.yml")
-        default_hparams = read_yaml(config_path)
-
-        hparams = merge_dictb_to_dicta(default_hparams, hparams)
+        config = (
+            merge_dictb_to_dicta(default_config, config)
+            if config is not None
+            else default_config
+        )
 
         self.embedding = nn.Embedding(
-            hparams.vocab_size, hparams.embedding_dim, padding_idx=hparams.pad_idx
+            config.vocab_size, config.embedding_dim, padding_idx=config.pad_idx
         )
 
         self.convs = nn.ModuleList(
             [
                 nn.Conv2d(
                     in_channels=1,
-                    out_channels=hparams.n_filters,
-                    kernel_size=(fs, hparams.embedding_dim),
+                    out_channels=config.n_filters,
+                    kernel_size=(fs, config.embedding_dim),
                 )
-                for fs in hparams.filter_sizes
+                for fs in config.filter_sizes
             ]
         )
 
-        self.fc = nn.Linear(len(hparams.filter_sizes) * hparams.n_filters, output_dim)
+        self.fc = nn.Linear(len(config.filter_sizes) * config.n_filters, output_dim)
 
-        self.dropout = nn.Dropout(hparams.dropout)
+        self.dropout = nn.Dropout(config.dropout)
         self.criterion = nn.CrossEntropyLoss()
 
-    def forward(self, text, seq_len):
+    def forward(self, text, text_lengths):
 
         # text = [batch size, sent len]
 

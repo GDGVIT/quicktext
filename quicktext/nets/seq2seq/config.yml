@@ -1,0 +1,9 @@
+# Configuration for Seq2seq with attention Model
+
+embedding_dim: 300
+hidden_dim: 32
+n_layers: 1
+bidirectional: True
+vocab_size: 26000
+dropout: 0.8
+lr: 0.5

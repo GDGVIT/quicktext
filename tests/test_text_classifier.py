@@ -5,19 +5,19 @@ from quicktext import TextClassifier
 
 class TextClassifierTester(unittest.TestCase):
     def test_init(self):
-        classifier = TextClassifier(n_classes=2)
+        classifier = TextClassifier(num_class=2)
 
         self.assertTrue(isinstance(classifier, TextClassifier))
 
     def test_predict(self):
-        classifier = TextClassifier(n_classes=2)
+        classifier = TextClassifier(num_class=2)
 
         text = "Sample text to test the classifier"
         output = classifier.predict(text)
-        self.assertTrue(isinstance(output.data, torch.Tensor))
+        self.assertIsInstance(output,dict)
 
     def test_get_ids(self):
-        classifier = TextClassifier(n_classes=2)
+        classifier = TextClassifier(num_class=2)
 
         text = "Sample text to test the classifier"
         ids = classifier.get_ids(text)

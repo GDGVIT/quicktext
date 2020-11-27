@@ -1,0 +1,6 @@
+# Configuration for FastText Model
+
+vocab_size: 26000
+embedding_dim: 300
+hidden_dim: 10
+lr: 0.5
